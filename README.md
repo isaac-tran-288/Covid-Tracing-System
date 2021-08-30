@@ -1,1 +1,6 @@
-# PSG
+# Project Studio Group 
+## Covid Tracing Application
+
+The Senior Health Officer is proposing a new initiative for COVID tracing. After modelling the age and demographics of checkins with the current COVID SAfe system, they have determined that a disproportionate number of seniors are not being compliant with the system. Survey feedback has indicated that seniors 1) do not understand how to access the app, 2) find manual check-in slow and inconsistently available. The new initiative being proposed will roll-out COVID tracing terminals where the general public can checkin, removing the need for the app on a user’s phone and creating a consistent user experience. They will trial this new system in a few select venues before making it available to a larger number of venues where COVID outbreaks have been known to occur.
+
+They have approached your team with creating a solution for the new COVID tracing initiative. They would like you to scope and build a web-based solution that will be accessed from the proposed terminals. The solution should allow a member of the public to log their visit to the venue. The process should be streamlined; ideally, a member of the general public can type a unique identifier in the terminal to log their visit. The terminal must talk to a centralised system that stores the checkins and, in the case of of an outbreak, can generate a report of people that must be contacted. They have asked you to consider security and privacy.
