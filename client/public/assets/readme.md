@@ -1,0 +1,1 @@
+Place images and any external content into this folder.
