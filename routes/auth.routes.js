@@ -38,8 +38,8 @@ module.exports = function (app) {
   //Authenticating a admin
   app.post(
     "/api/auth/admin/signup",
-    verifySignUp.checkDuplicateUsername,
-    verifySignUp.checkDuplicateEmail,
+    // verifySignUp.checkDuplicateUsername,
+    // verifySignUp.checkDuplicateEmail,
     controller.adminSignup
   );
 
@@ -51,8 +51,8 @@ module.exports = function (app) {
   //Authenticating a tracer
   app.post(
     "/api/auth/tracer/signup",
-    verifySignUp.checkDuplicateUsername,
-    verifySignUp.checkDuplicateEmail,
+    // verifySignUp.checkDuplicateUsername,
+    // verifySignUp.checkDuplicateEmail,
     controller.tracerSignup
   );
 

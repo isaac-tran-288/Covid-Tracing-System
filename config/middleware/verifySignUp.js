@@ -2,6 +2,8 @@ const db = require("../../models");
 const User = db.User;
 const Business = db.Business;
 
+// GOING TO NEED MODIFICATION TO HANDLE DIFFERENT USER TYPES
+
 checkDuplicateUsername = (req, res, next) => {
     User.findOne({
         where: {

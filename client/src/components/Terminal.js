@@ -37,11 +37,12 @@ const Terminal = () => {
         setUserName(e.target.value);
     }
     function validateForm() {
-        return username.length > 0;
+        //return username.length > 0;
+        return true;
     }
 
     function handleSubmit(event) {
-        event.preventDefault();
+        //event.preventDefault();
     }
 
 
