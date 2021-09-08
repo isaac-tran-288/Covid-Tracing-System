@@ -1,8 +1,13 @@
 module.exports = (sequelize, Sequelize) => {
     const Business = sequelize.define("Business", {
-      name: {
+      username: {
         type: Sequelize.STRING,
+        unique: true,
         allowNull: false
+      },
+      businessName: {
+        type: Sequelize.STRING,
+        allowNull: true
       },
       email: {
         type: Sequelize.STRING,

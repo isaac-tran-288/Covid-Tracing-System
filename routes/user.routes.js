@@ -37,4 +37,9 @@ module.exports = function (app) {
         [authJwt.verifyToken, authJwt.isTracer],
         controller.tracerBoard
     );
+
+    app.get(
+        "/api/test/terminal",
+        controller.terminalBoard
+    )
 };

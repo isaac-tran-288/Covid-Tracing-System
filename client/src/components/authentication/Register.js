@@ -26,7 +26,7 @@ const validEmail = (value) => {
     }
 };
 
-const vname = (value) => {
+const vusername = (value) => {
     if (value.length < 3 || value.length > 20) {
         return (
             <div className="alert alert-danger" role="alert">
@@ -35,6 +35,17 @@ const vname = (value) => {
         );
     }
 };
+
+// Not need just yet
+// const vname = (value) => {
+//     if (value.length < 3 || value.length > 20) {
+//         return (
+//             <div className="alert alert-danger" role="alert">
+//                 The name must be between 3 and 20 characters.
+//             </div>
+//         );
+//     }
+// };
 
 const vpassword = (value) => {
     if (value.length < 6 || value.length > 40) {
@@ -51,7 +62,7 @@ const Register = (props) => {
     const checkBtn = useRef();
 
     const [data, setData] = useState({
-        name: "",
+        username: "",
         email: "",
         phone: "",
         password: ""
@@ -76,7 +87,7 @@ const Register = (props) => {
         form.current.validateAll();
 
         if (checkBtn.current.context._errors.length === 0) {
-            AuthService.register(data.name, data.email, data.password).then(
+            AuthService.register(data.username, data.email, data.password).then(
                 (response) => {
                     setMessage(response.data.message);
                     setSuccessful(true);
@@ -107,7 +118,20 @@ const Register = (props) => {
                     {!successful && (
                         <div>
                             <div className="form-group">
-                                <label htmlFor="name">Username</label>
+                                <label htmlFor="username">Username</label>
+                                <Input
+                                    type="text"
+                                    className="form-control"
+                                    name="username"
+                                    id="username"
+                                    value={data.username}
+                                    onChange={handleChange}
+                                    validations={[required, vusername]}
+                                />
+                            </div>
+
+                            {/* <div className="form-group">
+                                <label htmlFor="name">Name</label>
                                 <Input
                                     type="text"
                                     className="form-control"
@@ -117,7 +141,7 @@ const Register = (props) => {
                                     onChange={handleChange}
                                     validations={[required, vname]}
                                 />
-                            </div>
+                            </div> */}
 
                             <div className="form-group">
                                 <label htmlFor="email">Email</label>
