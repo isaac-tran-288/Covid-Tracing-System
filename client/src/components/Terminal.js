@@ -1,15 +1,35 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+
+import UserService from "../services/user.service";
 
 const Terminal = () => {
+    const [content, setContent] = useState("");
+
+    useEffect(() => {
+        UserService.getTerminalBoard().then(
+            (response) => {
+                setContent(response.data);
+            },
+            (error) => {
+                const _content =
+                    (error.response &&
+                        error.response.data &&
+                        error.response.data.message) ||
+                    error.message ||
+                    error.toString();
+
+                setContent(_content);
+            }
+        );
+    }, []);
+
     return (
-        <div>
-            Beep boop, I'm a robot.
-            Here we can have a form to login to a terminal.
-            The credentials can contain a business location, terminalID(spoofed serial number) and business password.
-            When submitted, it will create a terminal entry in the database.
-            All users entering their details (unique id or manual) will be have their check-in linked to the terminal location.
+        <div className="container">
+            <header className="jumbotron">
+                <h3>{content}</h3>
+            </header>
         </div>
-    )
+    );
 };
 
 export default Terminal;

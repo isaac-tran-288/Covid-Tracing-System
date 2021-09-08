@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-    const User = sequelize.define("User", {
+    const Admin = sequelize.define("Admin", {
       username: {
         type: Sequelize.STRING,
         unique: true,
@@ -23,13 +23,13 @@ module.exports = (sequelize, Sequelize) => {
       freezeTableName: true
     });
 
-    User.associate = function(models) {
-      User.belongsTo(models.Role, {
+    Admin.associate = function(models) {
+      Admin.belongsTo(models.Role, {
         foreignKey: {
           allowNull: false
         }
       });
     };
   
-    return User;
+    return Admin;
   };

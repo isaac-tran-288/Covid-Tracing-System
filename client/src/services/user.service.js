@@ -21,10 +21,15 @@ const getTracerBoard = () => {
     return axios.get("/api/test/tracer", { headers: authHeader() });
 };
 
+const getTerminalBoard = () => {
+    return axios.get("/api/test/terminal", { headers: authHeader() });
+};
+
 export default {
     getPublicContent,
     getMemberBoard,
     getBusinessBoard,
     getTracerBoard,
     getAdminBoard,
+    getTerminalBoard
 };
