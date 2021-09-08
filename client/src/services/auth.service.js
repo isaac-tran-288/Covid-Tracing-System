@@ -37,7 +37,7 @@ export default {
   },
 
   registerAdmin: (data) => {
-    return axios.post("/api/auth//admin/signup", data);
+    return axios.post("/api/auth/admin/signup", data);
   },
 
   loginAdmin: (username, password) => {
@@ -56,7 +56,7 @@ export default {
   },
 
   registerTracer: (data) => {
-    return axios.post("/api/auth//tracer/signup", data);
+    return axios.post("/api/auth/tracer/signup", data);
   },
 
   loginTracer: (username, password) => {

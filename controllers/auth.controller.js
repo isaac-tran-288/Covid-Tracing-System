@@ -198,7 +198,7 @@ exports.terminalSignin = (req, res) => {
             //If a terminal exists - update the location (this will have to change later)
             else {
                 Terminal.update({
-                    location: location
+                    location: req.body.location
                 },
                 {
                     where: {
