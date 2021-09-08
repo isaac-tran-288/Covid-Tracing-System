@@ -40,10 +40,12 @@ app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "./client/build/index.html"));
 });
 
+
 // Sync our models (db) with the attached database
 // Start the server on the specified port
 // =============================================================
 db.sequelize.sync().then(() => {
+    // Uncomment this and run once (sets up the roles on the database)
     // initiateRoles();
 
     app.listen(PORT, () => { 

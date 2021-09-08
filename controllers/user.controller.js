@@ -17,3 +17,7 @@ exports.businessBoard = (req, res) => {
 exports.tracerBoard = (req, res) => {
     res.status(200).send("Contact Tracer Content.");
 };
+
+exports.terminalBoard = (req, res) => {
+    res.status(200).send("Terminal Content.");
+};

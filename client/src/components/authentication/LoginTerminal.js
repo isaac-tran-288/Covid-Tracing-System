@@ -15,23 +15,35 @@ const required = (value) => {
     }
 };
 
-const Login = (props) => {
+const LoginTerminal = (props) => {
     const form = useRef();
     const checkBtn = useRef();
 
-    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [tabletId, setTabletId] = useState("");
+    const [location, setLocation] = useState("");
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
 
-    const onChangeUsername = (e) => {
-        const username = e.target.value;
-        setUsername(username);
+    const onChangeEmail = (e) => {
+        const email = e.target.value;
+        setEmail(email);
     };
 
     const onChangePassword = (e) => {
         const password = e.target.value;
         setPassword(password);
+    };
+
+    const onChangeTabletId = (e) => {
+        const tabletId = e.target.value;
+        setTabletId(tabletId);
+    };
+
+    const onChangeLocation = (e) => {
+        const location = e.target.value;
+        setLocation(location);
     };
 
     const handleLogin = (e) => {
@@ -43,9 +55,9 @@ const Login = (props) => {
         form.current.validateAll();
 
         if (checkBtn.current.context._errors.length === 0) {
-            AuthService.login(username, password).then(
+            AuthService.loginTerminal(email, password, tabletId, location).then(
                 () => {
-                    props.history.push("/profile");
+                    props.history.push("/terminal");
                     window.location.reload();
                 },
                 (error) => {
@@ -75,18 +87,18 @@ const Login = (props) => {
                 /> */}
 
                 <div className="card-title">
-                    USER LOGIN
+                    TERMINAL LOGIN
                 </div>
 
                 <Form onSubmit={handleLogin} ref={form}>
                     <div className="form-group">
-                        <label htmlFor="username">Username</label>
+                        <label htmlFor="email">Email</label>
                         <Input
                             type="text"
                             className="form-control"
-                            name="username"
-                            value={username}
-                            onChange={onChangeUsername}
+                            name="email"
+                            value={email}
+                            onChange={onChangeEmail}
                             validations={[required]}
                         />
                     </div>
@@ -99,6 +111,30 @@ const Login = (props) => {
                             name="password"
                             value={password}
                             onChange={onChangePassword}
+                            validations={[required]}
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label htmlFor="terminalId">Tablet ID</label>
+                        <Input
+                            type="text"
+                            className="form-control"
+                            name="terminalId"
+                            value={tabletId}
+                            onChange={onChangeTabletId}
+                            validations={[required]}
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label htmlFor="location">Location</label>
+                        <Input
+                            type="text"
+                            className="form-control"
+                            name="location"
+                            value={location}
+                            onChange={onChangeLocation}
                             validations={[required]}
                         />
                     </div>
@@ -127,4 +163,4 @@ const Login = (props) => {
     );
 };
 
-export default Login;
+export default LoginTerminal;

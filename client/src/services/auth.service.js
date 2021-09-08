@@ -1,9 +1,9 @@
 import axios from "axios";
 
 export default {
-  register: (name, email, password) => {
+  register: (username, email, password) => {
     let data = {
-      name: name,
+      username: username,
       email: email,
       password: password,
     }
@@ -11,10 +11,10 @@ export default {
     return axios.post("/api/auth/signup", data);
   },
 
-  login: (name, password) => {
+  login: (username, password) => {
     return axios
       .post("/api/auth/signin", {
-        name,
+        username,
         password,
       })
       .then((response) => {
@@ -26,10 +26,10 @@ export default {
       });
   },
 
-  registerBusiness: (name, email, password) => {
+  registerBusiness: (username, email, password) => {
     //add other details later
     let data = {
-      name: name,
+      username: username,
       email: email, 
       password: password
     }
@@ -43,6 +43,18 @@ export default {
       .then((response) => {
         if (response.data.accessToken) {
           localStorage.setItem("user", JSON.stringify(response.data));
+        }
+  
+        return response.data;
+      });
+  },
+
+  loginTerminal: (email, password, tabletId, location) => {
+    return axios
+      .post("/api/auth/terminal/signin", {email, password, tabletId, location})
+      .then((response) => {
+        if (response.data.accessToken) {
+          localStorage.setItem("terminal", JSON.stringify(response.data));
         }
   
         return response.data;

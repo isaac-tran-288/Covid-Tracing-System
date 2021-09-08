@@ -34,4 +34,10 @@ module.exports = function(app) {
     "/api/auth/business/signin", 
     controller.businessSignin
   );
+
+  //Authenicating a terminal
+  app.post(
+    "/api/auth/terminal/signin", 
+    controller.terminalSignin
+  );
 };
