@@ -50,25 +50,21 @@ const Register = (props) => {
     const form = useRef();
     const checkBtn = useRef();
 
-    const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [data, setData] = useState({
+        name: "",
+        email: "",
+        phone: "",
+        password: ""
+    });
     const [successful, setSuccessful] = useState(false);
     const [message, setMessage] = useState("");
 
-    const onChangeName = (e) => {
-        const name = e.target.value;
-        setName(name);
-    };
-
-    const onChangeEmail = (e) => {
-        const email = e.target.value;
-        setEmail(email);
-    };
-
-    const onChangePassword = (e) => {
-        const password = e.target.value;
-        setPassword(password);
+    const handleChange = (e) => {
+        const {id, value} = e.target;
+        setData(prevState => ({
+            ...prevState,
+            [id]: value,
+        }));
     };
 
     const handleRegister = (e) => {
@@ -80,7 +76,7 @@ const Register = (props) => {
         form.current.validateAll();
 
         if (checkBtn.current.context._errors.length === 0) {
-            AuthService.register(name, email, password).then(
+            AuthService.register(data.name, data.email, data.password).then(
                 (response) => {
                     setMessage(response.data.message);
                     setSuccessful(true);
@@ -103,12 +99,6 @@ const Register = (props) => {
     return (
         <div className="col-md-12">
             <div className="card card-container">
-                <img
-                    src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-                    alt="profile-img"
-                    className="profile-img-card"
-                />
-
                 <div className="card-title">
                     USER REGISTRATION
                 </div>
@@ -117,13 +107,14 @@ const Register = (props) => {
                     {!successful && (
                         <div>
                             <div className="form-group">
-                                <label htmlFor="name">Name</label>
+                                <label htmlFor="name">Username</label>
                                 <Input
                                     type="text"
                                     className="form-control"
                                     name="name"
-                                    value={name}
-                                    onChange={onChangeName}
+                                    id="name"
+                                    value={data.name}
+                                    onChange={handleChange}
                                     validations={[required, vname]}
                                 />
                             </div>
@@ -134,9 +125,23 @@ const Register = (props) => {
                                     type="text"
                                     className="form-control"
                                     name="email"
-                                    value={email}
-                                    onChange={onChangeEmail}
+                                    id="email"
+                                    value={data.email}
+                                    onChange={handleChange}
                                     validations={[required, validEmail]}
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="phone">Phone Number</label>
+                                <Input
+                                    type="text"
+                                    className="form-control"
+                                    name="phone"
+                                    id="phone"
+                                    value={data.phone}
+                                    onChange={handleChange}
+                                    //validations={[required, validEmail]}
                                 />
                             </div>
 
@@ -146,13 +151,14 @@ const Register = (props) => {
                                     type="password"
                                     className="form-control"
                                     name="password"
-                                    value={password}
-                                    onChange={onChangePassword}
+                                    id="password"
+                                    value={data.password}
+                                    onChange={handleChange}
                                     validations={[required, vpassword]}
                                 />
                             </div>
 
-                            <div className="form-group">
+                            <div className="form-group" style={{ marginTop: 20 }} >
                                 <button className="btn btn-primary btn-block">Sign Up</button>
                             </div>
                         </div>
