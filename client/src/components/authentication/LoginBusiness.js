@@ -68,11 +68,6 @@ const LoginBusiness = (props) => {
     return (
         <div className="col-md-12">
             <div className="card card-container">
-                {/* <img
-                    src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-                    alt="profile-img"
-                    className="profile-img-card"
-                /> */}
 
                 <div className="card-title">
                     BUSINESS LOGIN
@@ -103,7 +98,7 @@ const LoginBusiness = (props) => {
                         />
                     </div>
 
-                    <div className="form-group">
+                    <div className="form-group" style={{ marginTop: 20 }}>
                         <button className="btn btn-primary btn-block" disabled={loading}>
                             {loading && (
                                 <span className="spinner-border spinner-border-sm"></span>

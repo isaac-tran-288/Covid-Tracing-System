@@ -15,35 +15,23 @@ const required = (value) => {
     }
 };
 
-const LoginTerminal = (props) => {
+const LoginAdmin = (props) => {
     const form = useRef();
     const checkBtn = useRef();
 
-    const [email, setEmail] = useState("");
+    const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [tabletId, setTabletId] = useState("");
-    const [location, setLocation] = useState("");
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
 
-    const onChangeEmail = (e) => {
-        const email = e.target.value;
-        setEmail(email);
+    const onChangeUsername = (e) => {
+        const username = e.target.value;
+        setUsername(username);
     };
 
     const onChangePassword = (e) => {
         const password = e.target.value;
         setPassword(password);
-    };
-
-    const onChangeTabletId = (e) => {
-        const tabletId = e.target.value;
-        setTabletId(tabletId);
-    };
-
-    const onChangeLocation = (e) => {
-        const location = e.target.value;
-        setLocation(location);
     };
 
     const handleLogin = (e) => {
@@ -55,9 +43,9 @@ const LoginTerminal = (props) => {
         form.current.validateAll();
 
         if (checkBtn.current.context._errors.length === 0) {
-            AuthService.loginTerminal(email, password, tabletId, location).then(
+            AuthService.loginAdmin(username, password).then(
                 () => {
-                    props.history.push("/terminal");
+                    props.history.push("/profile");
                     window.location.reload();
                 },
                 (error) => {
@@ -87,18 +75,18 @@ const LoginTerminal = (props) => {
                 /> */}
 
                 <div className="card-title">
-                    TERMINAL LOGIN
+                    ADMIN LOGIN
                 </div>
 
                 <Form onSubmit={handleLogin} ref={form}>
                     <div className="form-group">
-                        <label htmlFor="email">Email</label>
+                        <label htmlFor="username">Username</label>
                         <Input
                             type="text"
                             className="form-control"
-                            name="email"
-                            value={email}
-                            onChange={onChangeEmail}
+                            name="username"
+                            value={username}
+                            onChange={onChangeUsername}
                             validations={[required]}
                         />
                     </div>
@@ -111,30 +99,6 @@ const LoginTerminal = (props) => {
                             name="password"
                             value={password}
                             onChange={onChangePassword}
-                            validations={[required]}
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="terminalId">Tablet ID</label>
-                        <Input
-                            type="text"
-                            className="form-control"
-                            name="terminalId"
-                            value={tabletId}
-                            onChange={onChangeTabletId}
-                            validations={[required]}
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="location">Location</label>
-                        <Input
-                            type="text"
-                            className="form-control"
-                            name="location"
-                            value={location}
-                            onChange={onChangeLocation}
                             validations={[required]}
                         />
                     </div>
@@ -163,4 +127,4 @@ const LoginTerminal = (props) => {
     );
 };
 
-export default LoginTerminal;
+export default LoginAdmin;

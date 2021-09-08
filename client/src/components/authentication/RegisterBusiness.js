@@ -60,32 +60,25 @@ const RegisterBusiness = (props) => {
     const form = useRef();
     const checkBtn = useRef();
 
-    const [username, setUsername] = useState("");
-    // const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [data, setData] = useState({
+        username: "",
+        businessName: "",
+        email: "",
+        phone: "",
+        password: "",
+        location: {}
+    });
+
+    const handleChange = (e) => {
+        const {id, value} = e.target;
+        setData(prevState => ({
+            ...prevState,
+            [id]: value,
+        }));
+    };
+
     const [successful, setSuccessful] = useState(false);
     const [message, setMessage] = useState("");
-
-    const onChangeUsername = (e) => {
-        const username = e.target.value;
-        setUsername(username);
-    };
-
-    // const onChangeName = (e) => {
-    //     const name = e.target.value;
-    //     setName(name);
-    // };
-
-    const onChangeEmail = (e) => {
-        const email = e.target.value;
-        setEmail(email);
-    };
-
-    const onChangePassword = (e) => {
-        const password = e.target.value;
-        setPassword(password);
-    };
 
     const handleRegister = (e) => {
         e.preventDefault();
@@ -96,7 +89,7 @@ const RegisterBusiness = (props) => {
         form.current.validateAll();
 
         if (checkBtn.current.context._errors.length === 0) {
-            AuthService.registerBusiness(username, email, password).then(
+            AuthService.registerBusiness(data).then(
                 (response) => {
                     setMessage(response.data.message);
                     setSuccessful(true);
@@ -119,12 +112,6 @@ const RegisterBusiness = (props) => {
     return (
         <div className="col-md-12">
             <div className="card card-container">
-                <img
-                    src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-                    alt="profile-img"
-                    className="profile-img-card"
-                />
-
                 <div className="card-title">
                     BUSINESS REGISTRATION
                 </div>
@@ -138,23 +125,25 @@ const RegisterBusiness = (props) => {
                                     type="text"
                                     className="form-control"
                                     name="username"
-                                    value={username}
-                                    onChange={onChangeUsername}
+                                    id="username"
+                                    value={data.username}
+                                    onChange={handleChange}
                                     validations={[required, vusername]}
                                 />
                             </div>
 
-                            {/* <div className="form-group">
-                                <label htmlFor="name">Name</label>
+                            <div className="form-group">
+                                <label htmlFor="name">Business Name</label>
                                 <Input
                                     type="text"
                                     className="form-control"
                                     name="name"
-                                    value={name}
-                                    onChange={onChangeName}
-                                    validations={[required, vname]}
+                                    id="businessName"
+                                    value={data.businessName}
+                                    onChange={handleChange}
+                                    validations={[required]}
                                 />
-                            </div> */}
+                            </div>
 
                             <div className="form-group">
                                 <label htmlFor="email">Email</label>
@@ -162,9 +151,23 @@ const RegisterBusiness = (props) => {
                                     type="text"
                                     className="form-control"
                                     name="email"
-                                    value={email}
-                                    onChange={onChangeEmail}
+                                    id="email"
+                                    value={data.email}
+                                    onChange={handleChange}
                                     validations={[required, validEmail]}
+                                />
+                            </div>
+                            
+                            <div className="form-group">
+                                <label htmlFor="phone">Phone Number</label>
+                                <Input
+                                    type="text"
+                                    className="form-control"
+                                    name="phone"
+                                    id="phone"
+                                    value={data.phone}
+                                    onChange={handleChange}
+                                    validations={[required]}
                                 />
                             </div>
 
@@ -174,13 +177,14 @@ const RegisterBusiness = (props) => {
                                     type="password"
                                     className="form-control"
                                     name="password"
-                                    value={password}
-                                    onChange={onChangePassword}
+                                    id="password"
+                                    value={data.password}
+                                    onChange={handleChange}
                                     validations={[required, vpassword]}
                                 />
                             </div>
 
-                            <div className="form-group">
+                            <div className="form-group" style={{ marginTop: 20 }}>
                                 <button className="btn btn-primary btn-block">Sign Up</button>
                             </div>
                         </div>

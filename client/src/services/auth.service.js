@@ -1,13 +1,7 @@
 import axios from "axios";
 
 export default {
-  register: (username, email, password) => {
-    let data = {
-      username: username,
-      email: email,
-      password: password,
-    }
-    console.log(data);
+  register: (data) => {
     return axios.post("/api/auth/signup", data);
   },
 
@@ -26,14 +20,7 @@ export default {
       });
   },
 
-  registerBusiness: (username, email, password) => {
-    //add other details later
-    let data = {
-      username: username,
-      email: email, 
-      password: password
-    }
-
+  registerBusiness: (data) => {
     return axios.post("/api/auth/business/signup", data);
   },
 
@@ -49,6 +36,43 @@ export default {
       });
   },
 
+  registerAdmin: (data) => {
+    return axios.post("/api/auth//admin/signup", data);
+  },
+
+  loginAdmin: (username, password) => {
+    return axios
+      .post("/api/auth/admin/signin", {
+        username,
+        password,
+      })
+      .then((response) => {
+        if (response.data.accessToken) {
+          localStorage.setItem("user", JSON.stringify(response.data));
+        }
+  
+        return response.data;
+      });
+  },
+
+  registerTracer: (data) => {
+    return axios.post("/api/auth//tracer/signup", data);
+  },
+
+  loginTracer: (username, password) => {
+    return axios
+      .post("/api/auth/tracer/signin", {
+        username,
+        password,
+      })
+      .then((response) => {
+        if (response.data.accessToken) {
+          localStorage.setItem("user", JSON.stringify(response.data));
+        }
+  
+        return response.data;
+      });
+  },
   loginTerminal: (email, password, tabletId, location) => {
     return axios
       .post("/api/auth/terminal/signin", {email, password, tabletId, location})

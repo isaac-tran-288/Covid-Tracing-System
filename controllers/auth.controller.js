@@ -3,6 +3,8 @@ const config = require("../config/auth.config");
 const User = db.User;
 const Business = db.Business;
 const Terminal = db.Terminal;
+const Admin = db.Admin;
+const Tracer = db.Tracer;
 const Role = db.Role;
 
 var jwt = require("jsonwebtoken");
@@ -27,7 +29,9 @@ exports.signup = (req, res) => {
     // Save User to Database
     User.create({
         username: req.body.username,
+        name: req.body.name,
         email: req.body.email,
+        phone: req.body.phone,
         password: bcrypt.hashSync(req.body.password, 8),
         RoleId: roleId
     }).then(() => {
@@ -95,7 +99,9 @@ exports.businessSignup = (req, res) => {
         // Save Business to Database
         Business.create({
             username: req.body.username,
+            businessName: req.body.businessName,
             email: req.body.email,
+            phone: req.body.phone,
             password: bcrypt.hashSync(req.body.password, 8),
             RoleId: role.id //assign the new role id
         }).then(() => {
@@ -206,5 +212,133 @@ exports.terminalSignin = (req, res) => {
         }).catch(err => {
             res.status(500).send({ message: err.message });
         });
+    });
+};
+
+// login and signup for admin
+exports.adminSignup = (req, res) => {
+    //Find the business role (incase more are added later and id isn't the same)
+    Role.findOne({
+        where: {
+            name: "admin"
+        }
+    }).then(role => {
+        // Save Business to Database
+        Admin.create({
+            username: req.body.username,
+            name: req.body.name,
+            email: req.body.email,
+            password: bcrypt.hashSync(req.body.password, 8),
+            RoleId: role.id //assign the new role id
+        }).then(() => {
+            res.send({ message: "User was registered successfully!" });
+        }).catch(err => {
+            res.status(500).send({ message: err.message });
+        });
+    }).catch(err => {
+        res.status(500).send({ message: err.message });
+    });
+};
+
+exports.adminSignin = (req, res) => {
+    Admin.findOne({
+        where: {
+            username: req.body.username
+        }
+    }).then(admin => {
+        if (!admin) {
+            return res.status(404).send({ message: "User Not found." });
+        }
+
+        let passwordIsValid = bcrypt.compareSync(
+            req.body.password,
+            admin.password
+        );
+
+        if (!passwordIsValid) {
+            return res.status(401).send({
+                accessToken: null,
+                message: "Invalid Password!"
+            });
+        }
+
+        let token = jwt.sign({ id: admin.id }, config.secret, {
+            expiresIn: 86400 // 24 hours
+        });
+
+        res.status(200).send({
+            id: admin.id,
+            username: admin.username,
+            email: admin.email,
+            role: "ROLE_ADMIN", //we know it is a admin account at this point
+            accessToken: token
+        });
+
+    }).catch(err => {
+        res.status(500).send({ message: err.message });
+    });
+};
+
+// login and signup for contact tracer
+exports.tracerSignup = (req, res) => {
+    //Find the tracer role (incase more are added later and id isn't the same)
+    Role.findOne({
+        where: {
+            name: "tracer"
+        }
+    }).then(role => {
+        // Save Business to Database
+        Tracer.create({
+            username: req.body.username,
+            name: req.body.name,
+            email: req.body.email,
+            password: bcrypt.hashSync(req.body.password, 8),
+            RoleId: role.id //assign the new role id
+        }).then(() => {
+            res.send({ message: "User was registered successfully!" });
+        }).catch(err => {
+            res.status(500).send({ message: err.message });
+        });
+    }).catch(err => {
+        res.status(500).send({ message: err.message });
+    });
+};
+
+exports.tracerSignin = (req, res) => {
+    Tracer.findOne({
+        where: {
+            username: req.body.username
+        }
+    }).then(tracer => {
+        if (!tracer) {
+            return res.status(404).send({ message: "User Not found." });
+        }
+
+        let passwordIsValid = bcrypt.compareSync(
+            req.body.password,
+            tracer.password
+        );
+
+        if (!passwordIsValid) {
+            return res.status(401).send({
+                accessToken: null,
+                message: "Invalid Password!"
+            });
+        }
+
+        let token = jwt.sign({ id: tracer.id }, config.secret, {
+            expiresIn: 86400 // 24 hours
+        });
+
+        res.status(200).send({
+            id: tracer.id,
+            username: tracer.username,
+            email: tracer.email,
+            role: "ROLE_TRACER", //we know it is a tracer account at this point
+            accessToken: token
+        });
+
+    }).catch(err => {
+        res.status(500).send({ message: err.message });
     });
 };

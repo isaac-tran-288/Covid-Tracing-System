@@ -57,7 +57,7 @@ const vpassword = (value) => {
     }
 };
 
-const Register = (props) => {
+const RegisterTracer = (props) => {
     const form = useRef();
     const checkBtn = useRef();
 
@@ -65,7 +65,6 @@ const Register = (props) => {
         username: "",
         name:"",
         email: "",
-        phone: "",
         password: ""
     });
     const [successful, setSuccessful] = useState(false);
@@ -88,7 +87,7 @@ const Register = (props) => {
         form.current.validateAll();
 
         if (checkBtn.current.context._errors.length === 0) {
-            AuthService.register(data).then(
+            AuthService.registerTracer(data).then(
                 (response) => {
                     setMessage(response.data.message);
                     setSuccessful(true);
@@ -112,7 +111,7 @@ const Register = (props) => {
         <div className="col-md-12">
             <div className="card card-container">
                 <div className="card-title">
-                    USER REGISTRATION
+                    TRACER REGISTRATION
                 </div>
 
                 <Form onSubmit={handleRegister} ref={form}>
@@ -158,19 +157,6 @@ const Register = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label htmlFor="phone">Phone Number</label>
-                                <Input
-                                    type="text"
-                                    className="form-control"
-                                    name="phone"
-                                    id="phone"
-                                    value={data.phone}
-                                    onChange={handleChange}
-                                    //validations={[required, validEmail]}
-                                />
-                            </div>
-
-                            <div className="form-group">
                                 <label htmlFor="password">Password</label>
                                 <Input
                                     type="password"
@@ -206,4 +192,4 @@ const Register = (props) => {
     );
 };
 
-export default Register;
+export default RegisterTracer;
