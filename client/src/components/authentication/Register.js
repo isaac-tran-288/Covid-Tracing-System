@@ -63,6 +63,7 @@ const Register = (props) => {
 
     const [data, setData] = useState({
         username: "",
+        name:"",
         email: "",
         phone: "",
         password: ""
@@ -87,7 +88,7 @@ const Register = (props) => {
         form.current.validateAll();
 
         if (checkBtn.current.context._errors.length === 0) {
-            AuthService.register(data.username, data.email, data.password).then(
+            AuthService.register(data).then(
                 (response) => {
                     setMessage(response.data.message);
                     setSuccessful(true);
@@ -130,8 +131,8 @@ const Register = (props) => {
                                 />
                             </div>
 
-                            {/* <div className="form-group">
-                                <label htmlFor="name">Name</label>
+                            <div className="form-group">
+                                <label htmlFor="name">Full Name</label>
                                 <Input
                                     type="text"
                                     className="form-control"
@@ -139,9 +140,9 @@ const Register = (props) => {
                                     id="name"
                                     value={data.name}
                                     onChange={handleChange}
-                                    validations={[required, vname]}
+                                    validations={[required]}
                                 />
-                            </div> */}
+                            </div>
 
                             <div className="form-group">
                                 <label htmlFor="email">Email</label>

@@ -1,13 +1,7 @@
 import axios from "axios";
 
 export default {
-  register: (username, email, password) => {
-    let data = {
-      username: username,
-      email: email,
-      password: password,
-    }
-    console.log(data);
+  register: (data) => {
     return axios.post("/api/auth/signup", data);
   },
 
@@ -26,14 +20,7 @@ export default {
       });
   },
 
-  registerBusiness: (username, email, password) => {
-    //add other details later
-    let data = {
-      username: username,
-      email: email, 
-      password: password
-    }
-
+  registerBusiness: (data) => {
     return axios.post("/api/auth/business/signup", data);
   },
 

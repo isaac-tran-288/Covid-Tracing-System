@@ -62,9 +62,11 @@ const RegisterBusiness = (props) => {
 
     const [data, setData] = useState({
         username: "",
+        businessName: "",
         email: "",
         phone: "",
-        password: ""
+        password: "",
+        location: {}
     });
 
     const handleChange = (e) => {
@@ -87,7 +89,7 @@ const RegisterBusiness = (props) => {
         form.current.validateAll();
 
         if (checkBtn.current.context._errors.length === 0) {
-            AuthService.registerBusiness(data.username, data.email, data.password).then(
+            AuthService.registerBusiness(data).then(
                 (response) => {
                     setMessage(response.data.message);
                     setSuccessful(true);
@@ -123,24 +125,25 @@ const RegisterBusiness = (props) => {
                                     type="text"
                                     className="form-control"
                                     name="username"
+                                    id="username"
                                     value={data.username}
                                     onChange={handleChange}
                                     validations={[required, vusername]}
                                 />
                             </div>
 
-                            {/* <div className="form-group">
-                                <label htmlFor="name">Name</label>
+                            <div className="form-group">
+                                <label htmlFor="name">Business Name</label>
                                 <Input
                                     type="text"
                                     className="form-control"
                                     name="name"
-                                    id="name"
-                                    value={data.name}
+                                    id="businessName"
+                                    value={data.businessName}
                                     onChange={handleChange}
-                                    validations={[required, vname]}
+                                    validations={[required]}
                                 />
-                            </div> */}
+                            </div>
 
                             <div className="form-group">
                                 <label htmlFor="email">Email</label>
@@ -164,7 +167,7 @@ const RegisterBusiness = (props) => {
                                     id="phone"
                                     value={data.phone}
                                     onChange={handleChange}
-                                    //validations={[required, validEmail]}
+                                    validations={[required]}
                                 />
                             </div>
 

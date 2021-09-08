@@ -27,7 +27,9 @@ exports.signup = (req, res) => {
     // Save User to Database
     User.create({
         username: req.body.username,
+        name: req.body.name,
         email: req.body.email,
+        phone: req.body.phone,
         password: bcrypt.hashSync(req.body.password, 8),
         RoleId: roleId
     }).then(() => {
@@ -95,7 +97,9 @@ exports.businessSignup = (req, res) => {
         // Save Business to Database
         Business.create({
             username: req.body.username,
+            businessName: req.body.businessName,
             email: req.body.email,
+            phone: req.body.phone,
             password: bcrypt.hashSync(req.body.password, 8),
             RoleId: role.id //assign the new role id
         }).then(() => {
