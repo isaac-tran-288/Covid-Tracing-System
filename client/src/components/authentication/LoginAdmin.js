@@ -15,18 +15,18 @@ const required = (value) => {
     }
 };
 
-const LoginBusiness = (props) => {
+const LoginAdmin = (props) => {
     const form = useRef();
     const checkBtn = useRef();
 
-    const [email, setEmail] = useState("");
+    const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
 
-    const onChangeEmail = (e) => {
-        const email = e.target.value;
-        setEmail(email);
+    const onChangeUsername = (e) => {
+        const username = e.target.value;
+        setUsername(username);
     };
 
     const onChangePassword = (e) => {
@@ -43,7 +43,7 @@ const LoginBusiness = (props) => {
         form.current.validateAll();
 
         if (checkBtn.current.context._errors.length === 0) {
-            AuthService.loginBusiness(email, password).then(
+            AuthService.loginAdmin(username, password).then(
                 () => {
                     props.history.push("/profile");
                     window.location.reload();
@@ -68,20 +68,25 @@ const LoginBusiness = (props) => {
     return (
         <div className="col-md-12">
             <div className="card card-container">
+                {/* <img
+                    src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
+                    alt="profile-img"
+                    className="profile-img-card"
+                /> */}
 
                 <div className="card-title">
-                    BUSINESS LOGIN
+                    ADMIN LOGIN
                 </div>
 
                 <Form onSubmit={handleLogin} ref={form}>
                     <div className="form-group">
-                        <label htmlFor="email">Email</label>
+                        <label htmlFor="username">Username</label>
                         <Input
                             type="text"
                             className="form-control"
-                            name="email"
-                            value={email}
-                            onChange={onChangeEmail}
+                            name="username"
+                            value={username}
+                            onChange={onChangeUsername}
                             validations={[required]}
                         />
                     </div>
@@ -122,4 +127,4 @@ const LoginBusiness = (props) => {
     );
 };
 
-export default LoginBusiness;
+export default LoginAdmin;

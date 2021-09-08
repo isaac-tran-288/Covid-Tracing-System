@@ -9,6 +9,10 @@ import Login from "./components/authentication/Login";
 import Register from "./components/authentication/Register";
 import LoginBusiness from "./components/authentication/LoginBusiness";
 import RegisterBusiness from "./components/authentication/RegisterBusiness";
+import LoginAdmin from "./components/authentication/LoginAdmin";
+import RegisterAdmin from "./components/authentication/RegisterAdmin";
+import LoginTracer from "./components/authentication/LoginTracer";
+import RegisterTracer from "./components/authentication/RegisterTracer";
 
 import Home from "./components/Home";
 import Profile from "./components/Profile";
@@ -37,6 +41,10 @@ const App = () => {
                     <Route exact path="/register" component={Register} />
                     <Route exact path="/login/business" component={LoginBusiness} />
                     <Route exact path="/register/business" component={RegisterBusiness} />
+                    <Route exact path="/login/admin" component={LoginAdmin} />
+                    <Route exact path="/register/admin" component={RegisterAdmin} />
+                    <Route exact path="/login/tracer" component={LoginTracer} />
+                    <Route exact path="/register/tracer" component={RegisterTracer} />
                     <Route exact path="/login/terminal" component={LoginTerminal} />
 
                     {/* Profile information for the logged in user */}

@@ -93,6 +93,16 @@ const Navbar = () => {
                             </Link>
                         </NavDropdown.Item>
                         <NavDropdown.Item>
+                            <Link to={"/login/admin"} className="nav-link">
+                                Admin
+                            </Link>
+                        </NavDropdown.Item>
+                        <NavDropdown.Item>
+                            <Link to={"/login/tracer"} className="nav-link">
+                                Contact Tracer
+                            </Link>
+                        </NavDropdown.Item>
+                        <NavDropdown.Item>
                             <Link to={"/login/terminal"} className="nav-link">
                                 Terminal
                             </Link>
@@ -111,8 +121,19 @@ const Navbar = () => {
                                 Business
                             </Link>
                         </NavDropdown.Item>
-
+                        <NavDropdown.Item>
+                            <Link to={"/register/admin"} className="nav-link">
+                                Admin
+                            </Link>
+                        </NavDropdown.Item>
+                        <NavDropdown.Item>
+                            <Link to={"/register/tracer"} className="nav-link">
+                                Contact Tracer
+                            </Link>
+                        </NavDropdown.Item>
                     </NavDropdown>
+
+                    
                 </div>
             )}
         </nav>
