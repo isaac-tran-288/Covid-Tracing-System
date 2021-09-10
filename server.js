@@ -45,8 +45,8 @@ app.get("*", (req, res) => {
 // Start the server on the specified port
 // =============================================================
 db.sequelize.sync().then(() => {
-    // Uncomment this and run once (sets up the roles on the database)
-    // initiateRoles();
+    // Store the roles in the database if they have not already been created
+    initiateRoles();
 
     app.listen(PORT, () => { 
         console.log("app listening on http://localhost:" + PORT);
@@ -56,17 +56,34 @@ db.sequelize.sync().then(() => {
 // Create the different roles for the web application (only do once)
 // =============================================================
 
-const ROLES = ["member", "admin", "business", "tracer"]; //TODO put into schema later
+const ROLES = ["public", "admin", "business", "tracer"]; //TODO put into schema later
 
 initiateRoles = () => {
     let roleId = 1;
 
-    ROLES.forEach(role => {
-        db.Role.create({
-            id: roleId,
-            name: role
-        });
+    //Checks if the roles already exist in the database
+    //If not create them.
+    db.Role.findAll().then(data => {
+        let entries = [];
 
-        roleId++;
-    });
+        //Get the name from the data entries and place into an array
+        data.forEach(entry => {
+            entries.push(entry.name);
+        });
+        
+        //Check each role against the entries array, add any that are not there
+        ROLES.forEach(role => {
+            if(!entries.includes(role)) {
+                db.Role.create({
+                    id: roleId,
+                    name: role
+                });
+
+                roleId++;
+            } 
+            else {
+                console.log("Already in database: " + role);
+            }
+        });
+    });  
 }

@@ -1,8 +1,7 @@
 const jwt = require("jsonwebtoken");
 const config = require("../auth.config.js");
 const db = require("../../models");
-const User = db.user;
-const Business = db.Business;
+const User = db.User;
 
 verifyToken = (req, res, next) => {
     let token = req.headers["x-access-token"];
@@ -25,8 +24,8 @@ verifyToken = (req, res, next) => {
 };
 
 isAdmin = (req, res, next) => {
-    User.findByPk(req.userId).then(user => {
-        db.Role.findByPk(user.RoleId).then(result => {
+    User.findByPk(req.userId).then(account => {
+        db.Role.findByPk(account.RoleId).then(result => {
             if (result.name === "admin") {
                 next();
                 return;
@@ -40,8 +39,9 @@ isAdmin = (req, res, next) => {
 };
 
 isBusiness = (req, res, next) => {
-    Business.findByPk(req.userId).then(business => {
-        db.Role.findByPk(business.RoleId).then(result => {
+    User.findByPk(req.userId).then(account => {
+        db.Role.findByPk(account.RoleId).then(result => {
+            console.log(account);
             if (result.name === "business") {
                 next();
                 return;
@@ -55,8 +55,8 @@ isBusiness = (req, res, next) => {
 };
 
 isTracer = (req, res, next) => {
-    User.findByPk(req.userId).then(user => {
-        db.Role.findByPk(user.RoleId).then(result => {
+    User.findByPk(req.userId).then(account => {
+        db.Role.findByPk(account.RoleId).then(result => {
             if (result.name === "tracer") {
                 next();
                 return;

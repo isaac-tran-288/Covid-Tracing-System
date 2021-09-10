@@ -1,10 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
     const Business = sequelize.define("Business", {
-      username: {
-        type: Sequelize.STRING,
-        unique: true,
-        allowNull: false
-      },
       businessName: {
         type: Sequelize.STRING,
         allowNull: true
@@ -19,10 +14,6 @@ module.exports = (sequelize, Sequelize) => {
         unique: true,
         allowNull: true
       },
-      password: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
       locations: {
         type: Sequelize.JSON,
         allowNull: true
@@ -33,10 +24,11 @@ module.exports = (sequelize, Sequelize) => {
     });
 
     Business.associate = function(models) {
-      Business.belongsTo(models.Role, {
+      Business.belongsTo(models.User, {
         foreignKey: {
-            allowNull: false
-        }
+          allowNull: false
+        },
+        onDelete: "cascade"
       });
     };
   

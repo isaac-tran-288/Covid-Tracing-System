@@ -14,51 +14,13 @@ module.exports = function (app) {
   app.post(
     "/api/auth/signup",
     verifySignUp.checkDuplicateUsername,
-    verifySignUp.checkDuplicateEmail,
+    //verifySignUp.checkDuplicateEmail,
     controller.signup
   );
 
   app.post(
     "/api/auth/signin",
     controller.signin
-  );
-
-  //Authenticating a business
-  app.post(
-    "/api/auth/business/signup",
-    verifySignUp.checkDuplicateEmail,
-    controller.businessSignup
-  );
-
-  app.post(
-    "/api/auth/business/signin",
-    controller.businessSignin
-  );
-
-  //Authenticating a admin
-  app.post(
-    "/api/auth/admin/signup",
-    // verifySignUp.checkDuplicateUsername,
-    // verifySignUp.checkDuplicateEmail,
-    controller.adminSignup
-  );
-
-  app.post(
-    "/api/auth/admin/signin",
-    controller.adminSignin
-  );
-  
-  //Authenticating a tracer
-  app.post(
-    "/api/auth/tracer/signup",
-    // verifySignUp.checkDuplicateUsername,
-    // verifySignUp.checkDuplicateEmail,
-    controller.tracerSignup
-  );
-
-  app.post(
-    "/api/auth/tracer/signin",
-    controller.tracerSignin
   );
 
   //Authenicating a terminal

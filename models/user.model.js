@@ -5,20 +5,6 @@ module.exports = (sequelize, Sequelize) => {
         unique: true,
         allowNull: false
       },
-      name: {
-        type: Sequelize.STRING,
-        allowNull: true
-      },
-      email: {
-        type: Sequelize.STRING,
-        unique: true,
-        allowNull: false
-      },
-      phone: {
-        type: Sequelize.STRING,
-        unique: true,
-        allowNull: false
-      },
       password: {
         type: Sequelize.STRING,
         allowNull: false
@@ -32,7 +18,8 @@ module.exports = (sequelize, Sequelize) => {
       User.belongsTo(models.Role, {
         foreignKey: {
           allowNull: false
-        }
+        },
+        onDelete: "cascade"
       });
     };
   
