@@ -8,6 +8,7 @@ const Navbar = () => {
     const [showBusinessBoard, setShowBusinessBoard] = useState(false);
     const [showAdminBoard, setShowAdminBoard] = useState(false);
     const [showTracerBoard, setShowTracerBoard] = useState(false);
+    const [showPublicBoard, setShowPublicBoard] = useState(false);
     const [currentUser, setCurrentUser] = useState(undefined);
 
     useEffect(() => {
@@ -15,9 +16,10 @@ const Navbar = () => {
 
         if (user) {
             setCurrentUser(user);
+            setShowPublicBoard(user.role === "ROLE_PUBLIC");
             setShowBusinessBoard(user.role === "ROLE_BUSINESS");
-            setShowAdminBoard(user.roles === "ROLE_ADMIN");
-            setShowTracerBoard(user.roles === "ROLE_TRACER");
+            setShowAdminBoard(user.role === "ROLE_ADMIN");
+            setShowTracerBoard(user.role === "ROLE_TRACER");
         }
     }, []);
 
@@ -30,7 +32,15 @@ const Navbar = () => {
             <Link to={"/"} className="navbar-brand">
                 Covid Checkin System
             </Link>
+
             <div className="navbar-nav mr-auto">
+                {showPublicBoard && (
+                    <li className="nav-item">
+                        <Link to={"/member"} className="nav-link">
+                            Member
+                        </Link>
+                    </li>
+                )}
 
                 {showBusinessBoard && (
                     <li className="nav-item">
@@ -55,14 +65,6 @@ const Navbar = () => {
                         </Link>
                     </li>
                 )}
-
-                {currentUser && !showBusinessBoard && (
-                    <li className="nav-item">
-                        <Link to={"/member"} className="nav-link">
-                            Member
-                        </Link>
-                    </li>
-                )}
             </div>
 
             {currentUser ? (
@@ -73,7 +75,7 @@ const Navbar = () => {
                         </Link>
                     </li>
                     <li className="nav-item justify-content-end">
-                        <a href="/login" className="nav-link" onClick={logOut}>
+                        <a href="/home" className="nav-link" onClick={logOut}>
                             LogOut
                         </a>
                     </li>
@@ -107,7 +109,6 @@ const Navbar = () => {
                                 Terminal
                             </Link>
                         </NavDropdown.Item>
-
                     </NavDropdown>
 
                     <NavDropdown id="nav-dropdown-dark-example" title="Sign Up" menuVariant="dark">
@@ -131,9 +132,7 @@ const Navbar = () => {
                                 Contact Tracer
                             </Link>
                         </NavDropdown.Item>
-                    </NavDropdown>
-
-                    
+                    </NavDropdown>   
                 </div>
             )}
         </nav>

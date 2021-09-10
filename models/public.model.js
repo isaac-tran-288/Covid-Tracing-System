@@ -1,10 +1,15 @@
 module.exports = (sequelize, Sequelize) => {
-    const Tracer = sequelize.define("Tracer", {
+    const Public = sequelize.define("Public", {
       name: {
         type: Sequelize.STRING,
         allowNull: true
       },
       email: {
+        type: Sequelize.STRING,
+        unique: true,
+        allowNull: false
+      },
+      phone: {
         type: Sequelize.STRING,
         unique: true,
         allowNull: false
@@ -14,8 +19,8 @@ module.exports = (sequelize, Sequelize) => {
       freezeTableName: true
     });
 
-    Tracer.associate = function(models) {
-      Tracer.belongsTo(models.User, {
+    Public.associate = function(models) {
+        Public.belongsTo(models.User, {
         foreignKey: {
           allowNull: false
         },
@@ -23,5 +28,5 @@ module.exports = (sequelize, Sequelize) => {
       });
     };
   
-    return Tracer;
-  };
+    return Public;
+};

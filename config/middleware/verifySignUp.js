@@ -2,8 +2,6 @@ const db = require("../../models");
 const User = db.User;
 const Business = db.Business;
 
-// GOING TO NEED MODIFICATION TO HANDLE DIFFERENT USER TYPES
-
 checkDuplicateUsername = (req, res, next) => {
     User.findOne({
         where: {
@@ -20,6 +18,7 @@ checkDuplicateUsername = (req, res, next) => {
     });
 };
 
+//TODO THIS NEEDS TO BE RE-IMPLEMENTED TO ACCOUNT FOR THE PRIMARY USER TABLE AND THE SUB DATA TABLES
 checkDuplicateEmail = (req, res, next) => {
     //Check User accounts
     User.findOne({

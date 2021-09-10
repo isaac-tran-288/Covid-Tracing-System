@@ -1,9 +1,11 @@
 import React, { useState, useRef } from "react";
 import Form from "react-validation/build/form";
-import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 
-import AuthService from "../../services/auth.service";
+import TerminalForm from "./authentication/loginForms/terminal.form";
+import UserForm from "./authentication/loginForms/user.form";
+
+import AuthService from "../services/auth.service";
 
 const required = (value) => {
     if (!value) {
@@ -15,23 +17,33 @@ const required = (value) => {
     }
 };
 
-const LoginAdmin = (props) => {
+const Login = (props) => {
     const form = useRef();
     const checkBtn = useRef();
-
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
+    
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
 
-    const onChangeUsername = (e) => {
-        const username = e.target.value;
-        setUsername(username);
-    };
-
-    const onChangePassword = (e) => {
-        const password = e.target.value;
-        setPassword(password);
+    //Some fields will be blank but this does not matter as the backend login
+    //function only picks what it needs.
+    const [data, setData] = useState({
+        username: "",
+        password: "",
+        //Above is for user login
+        //Below is for terminal login
+        email: "",
+        password: "",
+        terminalId: "",
+        location: "",
+    });
+    
+    //Handle any changes within the form and set the data object accordingly
+    const handleDataChange = (e) => {
+        const {id, value} = e.target;
+        setData(prevState => ({
+            ...prevState,
+            [id]: value,
+        }));
     };
 
     const handleLogin = (e) => {
@@ -43,7 +55,8 @@ const LoginAdmin = (props) => {
         form.current.validateAll();
 
         if (checkBtn.current.context._errors.length === 0) {
-            AuthService.loginAdmin(username, password).then(
+            data.role = props.role; //add rolename here
+            AuthService.login(data).then(
                 () => {
                     props.history.push("/profile");
                     window.location.reload();
@@ -65,43 +78,31 @@ const LoginAdmin = (props) => {
         }
     };
 
+    //NOTE: all the variables and functions that are passed to the
+    //forms, can pass all the validation methods regardless of if
+    //the form needs it or not.
+    const params = {
+        data:data,
+        handleDataChange:handleDataChange,
+        //add in validation methods below
+        required:required,
+    } 
+
     return (
         <div className="col-md-12">
             <div className="card card-container">
-                {/* <img
-                    src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-                    alt="profile-img"
-                    className="profile-img-card"
-                /> */}
 
                 <div className="card-title">
-                    ADMIN LOGIN
+                    {props.title}
                 </div>
 
                 <Form onSubmit={handleLogin} ref={form}>
-                    <div className="form-group">
-                        <label htmlFor="username">Username</label>
-                        <Input
-                            type="text"
-                            className="form-control"
-                            name="username"
-                            value={username}
-                            onChange={onChangeUsername}
-                            validations={[required]}
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="password">Password</label>
-                        <Input
-                            type="password"
-                            className="form-control"
-                            name="password"
-                            value={password}
-                            onChange={onChangePassword}
-                            validations={[required]}
-                        />
-                    </div>
+                    {/* Determine if logging in a user or a terminal and present the correct form */}
+                    {props.role === "terminal" ? (
+                        <TerminalForm {...params}/>
+                    ) :
+                        <UserForm  {...params}/>
+                    }
 
                     <div className="form-group" style={{ marginTop: 20 }}>
                         <button className="btn btn-primary btn-block" disabled={loading}>
@@ -120,11 +121,11 @@ const LoginAdmin = (props) => {
                         </div>
                     )}
 
-                        <CheckButton style={{ display: "none" }} ref={checkBtn} />
+                    <CheckButton style={{ display: "none" }} ref={checkBtn} />
                 </Form>
             </div>
         </div>
     );
 };
 
-export default LoginAdmin;
+export default Login;

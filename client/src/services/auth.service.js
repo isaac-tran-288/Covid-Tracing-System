@@ -1,84 +1,29 @@
 import axios from "axios";
+//Hold the URL for the directed sign in (user or terminal)
+let URL;
 
+/*
+* NOTE: By passing a data object from a page to the backend
+* it elminates the need for multiple variables here, and if something
+* is added or subtracted in the future the data object here stays the
+* same regardless.
+*/
 export default {
-  register: (data) => {
+  //REGISTRATION FUNCTION
+  register: data => {
     return axios.post("/api/auth/signup", data);
   },
 
-  login: (username, password) => {
+  //LOGIN FUNCTIONS
+  login: data => {
+    //Determine is a user or terminal is logging in
+    data.role === "terminal" ? URL = "/api/auth/terminal/signin" : URL = "/api/auth/signin";
+
     return axios
-      .post("/api/auth/signin", {
-        username,
-        password,
-      })
+      .post(URL, data)
       .then((response) => {
         if (response.data.accessToken) {
           localStorage.setItem("user", JSON.stringify(response.data));
-        }
-  
-        return response.data;
-      });
-  },
-
-  registerBusiness: (data) => {
-    return axios.post("/api/auth/business/signup", data);
-  },
-
-  loginBusiness: (email, password) => {
-    return axios
-      .post("/api/auth/business/signin", {email, password})
-      .then((response) => {
-        if (response.data.accessToken) {
-          localStorage.setItem("user", JSON.stringify(response.data));
-        }
-  
-        return response.data;
-      });
-  },
-
-  registerAdmin: (data) => {
-    return axios.post("/api/auth/admin/signup", data);
-  },
-
-  loginAdmin: (username, password) => {
-    return axios
-      .post("/api/auth/admin/signin", {
-        username,
-        password,
-      })
-      .then((response) => {
-        if (response.data.accessToken) {
-          localStorage.setItem("user", JSON.stringify(response.data));
-        }
-  
-        return response.data;
-      });
-  },
-
-  registerTracer: (data) => {
-    return axios.post("/api/auth/tracer/signup", data);
-  },
-
-  loginTracer: (username, password) => {
-    return axios
-      .post("/api/auth/tracer/signin", {
-        username,
-        password,
-      })
-      .then((response) => {
-        if (response.data.accessToken) {
-          localStorage.setItem("user", JSON.stringify(response.data));
-        }
-  
-        return response.data;
-      });
-  },
-  loginTerminal: (email, password, tabletId, location) => {
-    return axios
-      .post("/api/auth/terminal/signin", {email, password, tabletId, location})
-      .then((response) => {
-        if (response.data.accessToken) {
-          localStorage.setItem("terminal", JSON.stringify(response.data));
         }
   
         return response.data;
