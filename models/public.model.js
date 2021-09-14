@@ -13,6 +13,11 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.STRING,
         unique: true,
         allowNull: false
+      },
+      qr: {
+        type: Sequelize.STRING.BINARY,
+        unique: true,
+        allowNull: false
       }
     },
     {

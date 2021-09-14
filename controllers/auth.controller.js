@@ -43,10 +43,12 @@ exports.signup = (req, res) => {
 
         switch(roleName) {
             case "business": //create business table
+                accountInfo.approved = false; //set the approval false by default
                 Business.create(accountInfo).catch(err => {res.status(500).send({ message: err.message });});
                 break;
     
             case "tracer": //create contact tracer table
+                accountInfo.approved = false; //set the approval false by default
                 Tracer.create(accountInfo).catch(err => {res.status(500).send({ message: err.message });});
                 break;
     
@@ -104,6 +106,11 @@ exports.signin = (req, res) => {
             return res.status(404).send({ message: "User Not found." });
         }
 
+        //Check the approval of the account if it has a business or tracer role
+        if((account.roleName == "business" || account.roleName == "tracer") && !account.approved) {
+            return res.status(404).send({ message: "Account has not been approved yet." });
+        }
+
         let passwordIsValid = bcrypt.compareSync(
             req.body.password,
             account.User.password
@@ -135,15 +142,28 @@ exports.signin = (req, res) => {
 exports.terminalSignin = (req, res) => {
     let businessId;
 
-    Business.findOne({where: { email: req.body.email }})
+    Business.findOne({
+        where: { email: req.body.email },
+        include: [{
+            model: User,
+            required: true,
+            include: [{
+                model: Role,
+                required: true
+            }]
+        }] 
+    })
     .then(business => {
+
+        console.log(business);
+
         if (!business) {
             return res.status(404).send({ message: "User Not found." });
         }
 
         let passwordIsValid = bcrypt.compareSync(
             req.body.password,
-            business.password
+            business.User.password
         );
 
         if (!passwordIsValid) {
@@ -155,15 +175,14 @@ exports.terminalSignin = (req, res) => {
 
         //set the id to be linked to the terminal for a foreign key
         businessId = business.id;
-
         //Find if there is a terminal in the database with that id
-        return Terminal.findOne({where: { serialNumber: req.body.tabletId }});
+        return Terminal.findOne({where: { serialNumber: req.body.terminalId }});
     })
     .then(terminal => {
         //If no terminal exists - create a new entry
         if (!terminal) {
             Terminal.create({
-                serialNumber: req.body.tabletId,
+                serialNumber: req.body.terminalId,
                 location: req.body.location,
                 BusinessId: businessId
             });
@@ -175,7 +194,7 @@ exports.terminalSignin = (req, res) => {
             },
             {
                 where: {
-                    serialNumber: req.body.tabletId
+                    serialNumber: req.body.terminalId
                 }
             });
         }

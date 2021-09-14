@@ -8,6 +8,10 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.STRING,
         unique: true,
         allowNull: false
+      },
+      approved: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false
       }
     },
     {

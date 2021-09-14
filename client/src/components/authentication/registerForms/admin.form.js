@@ -24,7 +24,7 @@ const PublicForm = props => {
                     className="form-control"
                     name="name"
                     id="name"
-                    value={props.data.name}
+                    value={props.account.name}
                     onChange={props.handleAccountChange}
                     validations={[props.required]}
                 />
@@ -37,7 +37,7 @@ const PublicForm = props => {
                     className="form-control"
                     name="email"
                     id="email"
-                    value={props.data.email}
+                    value={props.account.email}
                     onChange={props.handleAccountChange}
                     validations={[props.required, props.validEmail]}
                 />
