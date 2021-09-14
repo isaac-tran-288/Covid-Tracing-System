@@ -58,8 +58,14 @@ const Login = (props) => {
             data.role = props.role; //add rolename here
             AuthService.login(data).then(
                 () => {
-                    props.history.push("/profile");
-                    window.location.reload();
+                    if(props.role == "terminal") {
+                        props.history.push("/terminal");
+                        window.location.reload();
+                    } else {
+                        props.history.push("/profile");
+                        window.location.reload();
+                    }
+                    
                 },
                 (error) => {
                     const resMessage =

@@ -37,7 +37,7 @@ const TerminalForm = props => {
                     className="form-control"
                     name="terminalId"
                     id="terminalId"
-                    value={props.data.tabletId}
+                    value={props.data.terminalId}
                     onChange={props.handleDataChange}
                     validations={[props.required]}
                 />

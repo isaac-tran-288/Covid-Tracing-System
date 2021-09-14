@@ -17,6 +17,10 @@ module.exports = (sequelize, Sequelize) => {
       locations: {
         type: Sequelize.JSON,
         allowNull: true
+      },
+      approved: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false
       }
     },
     {
