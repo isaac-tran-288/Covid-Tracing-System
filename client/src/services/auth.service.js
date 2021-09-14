@@ -36,5 +36,26 @@ export default {
 
   getCurrentUser: () => {
     return JSON.parse(localStorage.getItem("user"));
+  },
+
+  //TRACER FUNCTIONS
+  approvalBusiness: data => {
+    return axios.post("/api/tracer/approval/business", data);
+  },
+
+  approvalTracers: data => {
+    return axios.post("/api/tracer/approval/tracers", data);
+  },
+
+  locationQuery: data => {
+    return axios.post("/api/tracer/query/location", data);
+  },
+
+  timeQuery: data => {
+    return axios.post("/api/tracer/query/time", data);
+  },
+
+  individualQuery: data => {
+    return axios.post("/api/tracer/query/individual", data);
   }
 }

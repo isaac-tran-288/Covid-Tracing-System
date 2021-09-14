@@ -29,20 +29,60 @@ const Terminal = () => {
     const form = useRef();
     const checkBtn = useRef();
 
-    const [username, setUserName] = useState("");
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
 
-    const handleChange = (e) => {
-        setUserName(e.target.value);
-    }
+    const [data, setData] = useState({
+        username: "",
+        name: "",
+        phone: ""
+    });
+
+    //Handle any changes within the form and set the data object accordingly
+    const handleDataChange = (e) => {
+        const {id, value} = e.target;
+        setData(prevState => ({
+            ...prevState,
+            [id]: value,
+        }));
+    };
+
     function validateForm() {
         //return username.length > 0;
         return true;
     }
 
     function handleSubmit(event) {
-        //event.preventDefault();
+        event.preventDefault();
+
+        setMessage("");
+        setLoading(true);
+
+        if (checkBtn.current.context._errors.length === 0) {
+            //Get the current terminals Id to cross check in the backend
+            const urlParams = new URLSearchParams(window.location.search);
+            data.terminalId = urlParams.get('id');
+            UserService.checkin(data).then(
+                () => {
+                    //Put some confirmation of checkin here
+                    window.location.reload();                    
+                },
+                (error) => {
+                    const resMessage =
+                        (error.response &&
+                            error.response.data &&
+                            error.response.data.message) ||
+                        error.message ||
+                        error.toString();
+
+                    setLoading(false);
+                    setMessage(resMessage);
+                }
+            );
+        } else {
+            setLoading(false);
+        }
+
     }
 
 
@@ -65,10 +105,10 @@ const Terminal = () => {
                         <Input
                             type="text"
                             className="form-control"
-                            name="username"
-                            value={username}
-                            onChange={handleChange}
-                        //validations={[required]}
+                            name="username" //add id
+                            id="username"
+                            value={data.username}
+                            onChange={handleDataChange}
                         />
                     </div>
 
@@ -83,6 +123,9 @@ const Terminal = () => {
                                 type="text"
                                 className="form-control"
                                 name="name"
+                                id="name"
+                                value={data.name}
+                                onChange={handleDataChange}
                             />
                         </div>
                         <div className="form-group" >
@@ -91,6 +134,9 @@ const Terminal = () => {
                                 type="text"
                                 className="form-control"
                                 name="phone"
+                                id="phone"
+                                value={data.phone}
+                                onChange={handleDataChange}
                             />
                         </div>
                     </div>

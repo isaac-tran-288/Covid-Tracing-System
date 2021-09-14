@@ -3,6 +3,14 @@ module.exports = (sequelize, Sequelize) => {
         location: {
             type: Sequelize.STRING,
             allowNull: false
+        },
+        name: {
+            type: Sequelize.STRING,
+            allowNull: true
+        },
+        phone: {
+            type: Sequelize.STRING,
+            allowNull: true
         }
     },
     {
@@ -12,7 +20,7 @@ module.exports = (sequelize, Sequelize) => {
     CheckIn.associate = function(models) {
         CheckIn.belongsTo(models.User, {
             foreignKey: {
-                allowNull: false
+                allowNull: true
             }
         });
     };
