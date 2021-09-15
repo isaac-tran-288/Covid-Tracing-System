@@ -57,7 +57,9 @@ const Register = (props) => {
 
     const [data, setData] = useState({
         username: "",
-        password: ""
+        password: "",
+        role: "",
+        accountInfo: {}
     });
     
     //Some fields will be blank but this does not matter as the backend registration
@@ -141,7 +143,6 @@ const Register = (props) => {
 
     return (
         <div className="col-md-12">
-            <div className="card card-container">
                 <div className="card-title">
                     {props.title}
                 </div>
@@ -150,19 +151,19 @@ const Register = (props) => {
                     {/* Depending on what role was passed from App.js through props we can load a specific
                     form for registering a user and pass the params object containing the validation and event
                     triggers */}
-                    {(!successful && props.role == "public") && (
+                    {(!successful && props.role === "public") && (
                         <PublicForm {...params}/>
                     )}
 
-                    {(!successful && props.role == "business") && (
+                    {(!successful && props.role === "business") && (
                         <BusinessForm {...params}/>
                     )}
 
-                    {(!successful && props.role == "tracer") && (
+                    {(!successful && props.role === "tracer") && (
                         <TracerForm {...params}/>
                     )}
 
-                    {(!successful && props.role == "admin") && (
+                    {(!successful && props.role === "admin") && (
                         <AdminForm {...params}/>
                     )}
 
@@ -179,7 +180,6 @@ const Register = (props) => {
                     <CheckButton style={{ display: "none" }} ref={checkBtn} />
                 </Form>
             </div>
-        </div>
     );
 };
 

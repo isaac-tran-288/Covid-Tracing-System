@@ -29,10 +29,11 @@ const Login = (props) => {
     const [data, setData] = useState({
         username: "",
         password: "",
+        role: "",
         //Above is for user login
         //Below is for terminal login
         email: "",
-        password: "",
+        
         terminalId: "",
         location: "",
     });
@@ -57,9 +58,9 @@ const Login = (props) => {
         if (checkBtn.current.context._errors.length === 0) {
             data.role = props.role; //add rolename here
             AuthService.login(data).then(
-                () => {
+                result => {
                     if(props.role == "terminal") {
-                        props.history.push("/terminal");
+                        props.history.push("/terminal/?id=" + result.terminalId);
                         window.location.reload();
                     } else {
                         props.history.push("/profile");
@@ -96,7 +97,6 @@ const Login = (props) => {
 
     return (
         <div className="col-md-12">
-            <div className="card card-container">
 
                 <div className="card-title">
                     {props.title}
@@ -130,7 +130,6 @@ const Login = (props) => {
                     <CheckButton style={{ display: "none" }} ref={checkBtn} />
                 </Form>
             </div>
-        </div>
     );
 };
 

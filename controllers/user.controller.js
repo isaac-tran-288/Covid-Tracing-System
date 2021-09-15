@@ -1,3 +1,4 @@
+const e = require("express");
 const db = require("../models/index.js");
 const {Role, User, Public, Business, Tracer, Admin, Terminal, CheckIn} = db;
 
@@ -17,6 +18,26 @@ exports.memberBoard = (req, res) => {
     // Same as public content?
     // Shows the total amount of checkins? - just for a cool reference
     res.status(200).send("Member Content.");
+};
+
+//Find the user associated with the input details
+//Create a checkin based on the input details (registered user or manual checkin)
+exports.checkin = (req, res) => {
+    User.findOne({ where: {username: req.body.username}})
+    .then(user => {
+        if(user) {
+            CheckIn.create({
+                location: req.body.location,
+                UserId: user.id
+            });
+        } else {
+            CheckIn.create({
+                location: req.body.location,
+                name: req.body.location,
+                phone: req.body.phone
+            });
+        }
+    });
 };
 
 //==========================================================================
@@ -69,10 +90,9 @@ exports.queryLocation = (req, res) => {
 //Query the database to find all checkins that fall between a set time period
 exports.queryTime = (req, res) => {
     CheckIn.findAll({
-        where: 
-            {
-                location: req.body.location
-            }
+        createdAt: {
+            $between: [req.body.startDate, req.body.endDate]
+        }
     })
     .then(data => {
         res.status(200).send(data); 
@@ -80,18 +100,22 @@ exports.queryTime = (req, res) => {
 };
 
 //Query the database to find all checkins that are connected to a particular user through username or phone
+//Username for registered members
+//Phone for people doing manual checkin
 exports.queryIndividual = (req, res) => {
     Public.findOne({
         where: {
-            $or: [
-                {
-                    username: req.body.username
-                }
-            ]
+            username: req.body.username
         }
     })
     .then(user => {
-        return CheckIn.findAll({where: {UserId: user.id}})
+        //If there is a user collect check ins via the user id
+        //else get it by the phone number
+        if(user) {
+            return CheckIn.findAll({where: {UserId: user.id}});
+        } else {
+            return CheckIn.findAll({where: {phone: req.body.phone}});
+        }   
     })
     .then(checkins => {
         res.status(200).send(checkins); 
@@ -114,4 +138,41 @@ exports.adminBoard = (req, res) => {
 exports.terminalBoard = (req, res) => {
     // Shows the check in form
     res.status(200).send("Terminal Content.");
+};
+
+//==========================================================================
+// CHECKIN FUNCTIONS
+//==========================================================================
+
+exports.createCheckin = (req, res) => {
+    let location = "";
+
+    //Find which terminal is logging in
+    Terminal.findOne({ where: {serialNumber: req.body.terminalId}})
+    .then(terminal => {
+        location = terminal.location;
+    })
+    .then(() => {
+        // Find a user in the database if they exist
+        return User.findOne({ where: {username: req.body.username}}) 
+    })
+    .then(user => {
+        // Link a check in to the user if there is one
+        if(user) {
+            CheckIn.create({
+                location: location,
+                UserId: user.id
+            });
+        } else { // Create a new check in based off the manual check in
+            CheckIn.create({
+                location: location,
+                name: req.body.name,
+                phone: req.body.phone
+            });
+        }
+    }).catch(err => {
+        res.status(500).send({ message: err.message });
+    });
+
+    res.status(200).send("Checked in."); 
 };

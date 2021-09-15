@@ -43,12 +43,12 @@ exports.signup = (req, res) => {
 
         switch(roleName) {
             case "business": //create business table
-                accountInfo.approved = false; //set the approval false by default
+                accountInfo.approved = true; //set the approval false by default (true for testing)
                 Business.create(accountInfo).catch(err => {res.status(500).send({ message: err.message });});
                 break;
     
             case "tracer": //create contact tracer table
-                accountInfo.approved = false; //set the approval false by default
+                accountInfo.approved = true; //set the approval false by default (true for testing)
                 Tracer.create(accountInfo).catch(err => {res.status(500).send({ message: err.message });});
                 break;
     
@@ -154,9 +154,6 @@ exports.terminalSignin = (req, res) => {
         }] 
     })
     .then(business => {
-
-        console.log(business);
-
         if (!business) {
             return res.status(404).send({ message: "User Not found." });
         }
@@ -199,7 +196,10 @@ exports.terminalSignin = (req, res) => {
             });
         }
 
-        res.status(200).send({ message: "Terminal Logged In." });
+        res.status(200).send({
+            message: "Terminal Logged In.",
+            terminalId: req.body.terminalId
+        });
         
     }).catch(err => {
         res.status(500).send({ message: err.message });
