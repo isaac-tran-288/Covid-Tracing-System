@@ -57,9 +57,9 @@ const Login = (props) => {
         if (checkBtn.current.context._errors.length === 0) {
             data.role = props.role; //add rolename here
             AuthService.login(data).then(
-                () => {
+                result => {
                     if(props.role == "terminal") {
-                        props.history.push("/terminal");
+                        props.history.push("/terminal/?id=" + result.terminalId);
                         window.location.reload();
                     } else {
                         props.history.push("/profile");

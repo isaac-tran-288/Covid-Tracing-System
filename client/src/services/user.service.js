@@ -25,11 +25,18 @@ const getTerminalBoard = () => {
     return axios.get("/api/test/terminal", { headers: authHeader() });
 };
 
+  //CHECKIN FUNCTIONS
+const checkin = data => {
+    console.log(data);
+    return axios.post("/api/checkin/create", data);
+};
+
 export default {
     getPublicContent,
     getMemberBoard,
     getBusinessBoard,
     getTracerBoard,
     getAdminBoard,
-    getTerminalBoard
+    getTerminalBoard,
+    checkin
 };
