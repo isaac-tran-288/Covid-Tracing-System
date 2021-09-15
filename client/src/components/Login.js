@@ -29,10 +29,11 @@ const Login = (props) => {
     const [data, setData] = useState({
         username: "",
         password: "",
+        role: "",
         //Above is for user login
         //Below is for terminal login
         email: "",
-        password: "",
+        
         terminalId: "",
         location: "",
     });

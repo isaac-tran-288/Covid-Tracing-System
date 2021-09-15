@@ -36,3 +36,9 @@ label {
   font-weight: bold;
   text-align: center;
 }
+
+.camera {
+  align-self: center;
+  max-width: 300px !important;
+  padding: 20px 20px;
+}

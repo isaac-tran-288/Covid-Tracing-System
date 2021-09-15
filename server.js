@@ -46,7 +46,7 @@ app.get("*", (req, res) => {
 // =============================================================
 db.sequelize.sync().then(() => {
     // Store the roles in the database if they have not already been created
-    initiateRoles();
+    // initiateRoles();
 
     app.listen(PORT, () => { 
         console.log("app listening on http://localhost:" + PORT);

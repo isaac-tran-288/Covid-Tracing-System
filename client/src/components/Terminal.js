@@ -3,6 +3,8 @@ import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import UserService from "../services/user.service";
+import Scanner from "react-webcam-qr-scanner";
+
 
 const Terminal = () => {
     const [content, setContent] = useState("");
@@ -28,7 +30,8 @@ const Terminal = () => {
 
     const form = useRef();
     const checkBtn = useRef();
-
+    const [formType, setFormType] = useState("qr");
+    const [username, setUserName] = useState("");
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
 
@@ -50,6 +53,10 @@ const Terminal = () => {
     function validateForm() {
         //return username.length > 0;
         return true;
+    }
+
+    function handleFormType(type) {
+        setFormType(type);
     }
 
     function handleSubmit(event) {
@@ -84,7 +91,13 @@ const Terminal = () => {
         }
 
     }
+    const handleDecode = (result) => {
+        console.log(result);
+    }
 
+    const handleScannerLoad = (mode) => {
+        console.log(mode);
+    }
 
     return (
         <div className="container">
@@ -96,70 +109,71 @@ const Terminal = () => {
                 <div className="card-title">
                     COVID-19 CHECKIN
                 </div>
-                <Form onSubmit={handleSubmit} ref={form}>
-                    <div className="form-group">
-                        <div className="form-check">
-                            <input className="form-check-input" type="radio" name="checkin" id="ID" checked />
-                            <label className="form-check-label" htmlFor="ID">Username (Unique ID)</label>
-                        </div>
-                        <Input
-                            type="text"
-                            className="form-control"
-                            name="username" //add id
-                            id="username"
-                            value={data.username}
-                            onChange={handleDataChange}
+
+                {formType === "qr" ? (
+                    <div>
+                        <button className="btn btn-primary btn-block" onClick={() => handleFormType("manual")} >
+                            Switch To Manual Check-in
+                        </button>
+                        <Scanner
+                            className="camera"
+                            onDecode={handleDecode}
+                            onScannerLoad={handleScannerLoad}
+                            constraints={{
+                                audio: false,
+                                video: {
+                                    facingMode: "environment"
+                                }
+                            }}
+                            captureSize={{ width: 1280, height: 720 }}
                         />
                     </div>
+                ) :
+                    (
+                        <div>
+                            <button className="btn btn-primary btn-block" onClick={() => handleFormType("qr")}>
+                                Switch To QR Scanning
+                            </button>
+                            <Form onSubmit={handleSubmit} ref={form}>
+                                <div className="form-group" >
+                                    <label htmlFor="name">Full Name</label>
+                                    <Input
+                                        type="text"
+                                        className="form-control"
+                                        name="name"
+                                    />
+                                </div>
+                                <div className="form-group" >
+                                    <label htmlFor="phone">Phone Number</label>
+                                    <Input
+                                        type="text"
+                                        className="form-control"
+                                        name="phone"
+                                    />
+                                </div>
 
-                    <div className="form-group">
-                        <div className="form-check">
-                            <input className="form-check-input" type="radio" name="checkin" id="contact" />
-                            <label className="form-check-label" htmlFor="ID">Full Name and Phone Number</label>
-                        </div>
-                        <div className="form-group" >
-                            <label htmlFor="name">Full Name</label>
-                            <Input
-                                type="text"
-                                className="form-control"
-                                name="name"
-                                id="name"
-                                value={data.name}
-                                onChange={handleDataChange}
-                            />
-                        </div>
-                        <div className="form-group" >
-                            <label htmlFor="phone">Phone Number</label>
-                            <Input
-                                type="text"
-                                className="form-control"
-                                name="phone"
-                                id="phone"
-                                value={data.phone}
-                                onChange={handleDataChange}
-                            />
-                        </div>
-                    </div>
 
-                    <div className="form-group" style={{ marginTop: 20 }}>
-                        <button className="btn btn-primary btn-block" disabled={loading || !validateForm()}>
-                            {loading && (
-                                <span className="spinner-border spinner-border-sm"></span>
-                            )}
-                            <span>Check In</span>
-                        </button>
-                    </div>
+                                <div className="form-group" style={{ marginTop: 20 }}>
+                                    <button className="btn btn-primary btn-block" disabled={loading || !validateForm()}>
+                                        {loading && (
+                                            <span className="spinner-border spinner-border-sm"></span>
+                                        )}
+                                        <span>Check In</span>
+                                    </button>
+                                </div>
 
-                    {message && (
-                        <div className="form-group">
-                            <div className="alert alert-danger" role="alert">
-                                {message}
-                            </div>
+                                {message && (
+                                    <div className="form-group">
+                                        <div className="alert alert-danger" role="alert">
+                                            {message}
+                                        </div>
+                                    </div>
+                                )}
+
+                                <CheckButton style={{ display: "none" }} ref={checkBtn} />
+                            </Form>
                         </div>
                     )}
-
-                    <CheckButton style={{ display: "none" }} ref={checkBtn} />
-                </Form>
             </div>
         </div>
     );
