@@ -28,8 +28,8 @@ const Navbar = () => {
     };
 
     return (
-        <nav className="navbar navbar-expand navbar-dark bg-dark">
-            <Link to={"/"} className="navbar-brand">
+        <nav className="navbar navbar-expand-lg navbar-light fixed-top">
+            <Link to={"/"} className="navbar-brand margin">
                 Covid Checkin System
             </Link>
 
@@ -59,11 +59,30 @@ const Navbar = () => {
                 )}
 
                 {showTracerBoard && (
-                    <li className="nav-item">
-                        <Link to={"/tracer"} className="nav-link">
-                            Tracer Board
-                        </Link>
-                    </li>
+                    <div className="navbar-nav ml-auto">
+                        <li className="nav-item">
+                            <Link to={"/tracer"} className="nav-link">
+                                Tracer Board
+                            </Link>
+                        </li>
+                        <NavDropdown id="nav-dropdown-dark-example" title="View Checkin" menuVariant="light">
+                            <NavDropdown.Item>
+                                <Link to={"/tracer/person"} className="nav-link">
+                                    View By Person
+                                </Link>
+                            </NavDropdown.Item>
+                            <NavDropdown.Item>
+                                <Link to={"/tracer/time"} className="nav-link">
+                                    View By Time
+                                </Link>
+                            </NavDropdown.Item>
+                            <NavDropdown.Item>
+                                <Link to={"/tracer/location"} className="nav-link">
+                                    View by Location
+                                </Link>
+                            </NavDropdown.Item>
+                        </NavDropdown>
+                    </div>
                 )}
             </div>
 
@@ -81,9 +100,9 @@ const Navbar = () => {
                     </li>
                 </div>
             ) : (
-                
+
                 <div className="navbar-nav ml-auto">
-                    <NavDropdown id="nav-dropdown-dark-example" title="Login" menuVariant="dark">
+                    <NavDropdown id="nav-dropdown-dark-example" title="Login" menuVariant="light">
                         <NavDropdown.Item>
                             <Link to={"/login"} className="nav-link">
                                 User
@@ -111,7 +130,7 @@ const Navbar = () => {
                         </NavDropdown.Item>
                     </NavDropdown>
 
-                    <NavDropdown id="nav-dropdown-dark-example" title="Sign Up" menuVariant="dark">
+                    <NavDropdown id="nav-dropdown-dark-example" title="Sign Up" menuVariant="light">
                         <NavDropdown.Item>
                             <Link to={"/register"} className="nav-link">
                                 User
@@ -132,7 +151,7 @@ const Navbar = () => {
                                 Contact Tracer
                             </Link>
                         </NavDropdown.Item>
-                    </NavDropdown>   
+                    </NavDropdown>
                 </div>
             )}
         </nav>

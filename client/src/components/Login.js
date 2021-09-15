@@ -29,10 +29,11 @@ const Login = (props) => {
     const [data, setData] = useState({
         username: "",
         password: "",
+        role: "",
         //Above is for user login
         //Below is for terminal login
         email: "",
-        password: "",
+        
         terminalId: "",
         location: "",
     });
@@ -96,7 +97,6 @@ const Login = (props) => {
 
     return (
         <div className="col-md-12">
-            <div className="card card-container">
 
                 <div className="card-title">
                     {props.title}
@@ -130,7 +130,6 @@ const Login = (props) => {
                     <CheckButton style={{ display: "none" }} ref={checkBtn} />
                 </Form>
             </div>
-        </div>
     );
 };
 

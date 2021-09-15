@@ -1,8 +1,11 @@
 import React from "react";
 import AuthService from "../services/auth.service";
+import QRCode from 'react-qr-code';
 
 const Profile = () => {
     const currentUser = AuthService.getCurrentUser();
+
+    // const imageUrl = QRCode.toDataURL(currentUser.username);
 
     return (
         <div className="container">
@@ -24,6 +27,13 @@ const Profile = () => {
             <p>
                 <strong>Role:</strong> {currentUser.role}
             </p>
+            {currentUser.role === "ROLE_PUBLIC" && (<div>
+                <strong>QR Code:</strong><br />
+                
+                    <QRCode value={currentUser.username} />
+
+            </div>)
+            }
         </div>
     );
 };
