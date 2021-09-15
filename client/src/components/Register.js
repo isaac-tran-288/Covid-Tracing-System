@@ -143,7 +143,6 @@ const Register = (props) => {
 
     return (
         <div className="col-md-12">
-            <div className="card card-container">
                 <div className="card-title">
                     {props.title}
                 </div>
@@ -181,7 +180,6 @@ const Register = (props) => {
                     <CheckButton style={{ display: "none" }} ref={checkBtn} />
                 </Form>
             </div>
-        </div>
     );
 };
 
