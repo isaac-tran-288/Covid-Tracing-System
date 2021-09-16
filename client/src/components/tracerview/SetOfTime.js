@@ -1,29 +1,89 @@
-// Interace for PSG-19
+import React, { useState, useEffect } from "react";
 
-import React, { Component } from "react";
+import UserService from "../../services/user.service";
+import Datetime from 'react-datetime';
+import "react-datetime/css/react-datetime.css";
 
-export default class SetOfTime extends Component {
-    render() {
-        return (
-            <form>
-                <h3>CHECK-IN TIME PERIOD </h3>
+const SetOfTime = () => {
+    const [data, setData] = useState({
+        startTime: "",
+        endTime: ""
+    });
 
-                <div className="form-group mb-2">
-                    <label>From</label>
-                    <input type="text" className="form-control" placeholder="Please enter time" />
-                </div>
+    const [accounts, setAccounts] = useState([]);
 
-                <div className="form-group mb-2">
-                    <label>To</label>
-                    <input type="text" className="form-control" placeholder="Please enter time" />
-                </div>
-
-
-                <div class="text-center">
-                <button type="button" class="btn btn-primary btn-lg btn-block mb-5">CHECK</button>
-                </div>     
-                           
-            </form>
-        );
+    const setStartTime = obj => {
+        data.startTime = obj;
     }
+
+    const setEndTime = obj => {
+        data.endTime = obj;
+    }
+
+    const handleSearch = (e) => {
+        e.preventDefault();
+
+        console.log(data);
+
+        if(data.startTime == "" && data.endTime == "") {
+            return;
+        }
+
+        UserService.timeQuery(data).then(
+            result => {
+                console.log(result);
+                setAccounts(result.data);
+
+                //reset the data after use
+                setData({
+                    username: "",
+                    phone: ""
+                });
+            },
+            (error) => {
+                console.log(error);
+            }
+        );
+    };
+
+    return (
+        <form>
+            <h3>CHECK-IN TIME PERIOD </h3>
+
+            <div className="form-group mb-2">
+                <label>From</label>
+                <Datetime onChange={setStartTime} />
+            </div>
+
+            <div className="form-group mb-2">
+                <label>To</label>
+                <Datetime onChange={setEndTime} />
+            </div>
+
+
+            <div class="text-center">
+                <button onClick={handleSearch} type="button" class="btn btn-primary btn-lg btn-block mb-5">CHECK</button>
+            </div>   
+
+            {accounts.length > 0 ? (accounts.map(account => {
+                let id = account.userId; //only for registered users
+                let name = account.name;
+                let phone = account.phone;
+                let createdAt = account.createdAt;
+                
+                return (
+                    <li id={id}>
+                        <strong>Name:</strong> {name} <br></br>
+                        <strong>Phone:</strong> {phone}<br></br>
+                        <strong>Time:</strong> {createdAt}
+                    </li>
+                )
+            })) : (
+                <li></li>
+            )}  
+                        
+        </form>
+    );
 }
+
+export default SetOfTime;
