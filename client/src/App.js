@@ -17,6 +17,7 @@ import BoardAdmin from "./components/boards/BoardAdmin";
 import BoardTracer from "./components/boards/BoardTracer";
 
 import Terminal from "./components/Terminal";
+import Confirmation from "./components/Confirmation";
 
 import SpecificPerson from "./components/tracerview/SpecificPerson";
 import SetOfTime from "./components/tracerview/SetOfTime";
@@ -73,11 +74,14 @@ const App = () => {
                         {/* Profile information for the logged in user */}
                         <Route exact path="/profile" component={Profile} />
 
+                        {/* Profile information for the logged in user */}
+                        <Route exact path="/confirmation" component={Confirmation} />
+
                         {/* Specific information for user types I.e approving accounts, adding location, etc*/}
                         <Route path="/business" component={BoardBusiness} />
                         <Route path="/member" component={BoardMember} />
                         <Route path="/admin" component={BoardAdmin} />
-                        <Route path="/tracer" component={BoardTracer} />
+                        <Route exact path="/tracer" component={BoardTracer} />
                         <Route path="/terminal" component={Terminal} />
 
                         <Route path="/tracer/person" component={SpecificPerson} />

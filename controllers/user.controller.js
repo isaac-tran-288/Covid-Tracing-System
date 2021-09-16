@@ -1,4 +1,3 @@
-const e = require("express");
 const db = require("../models/index.js");
 const {Role, User, Public, Business, Tracer, Admin, Terminal, CheckIn} = db;
 
@@ -79,9 +78,62 @@ exports.tracerApprovals = (req, res) => {
     });
 };
 
+//Approve or reject the account sent through from the frontend
+//Data needed
+// type - the role the account is
+// id - the id of the datatable
+exports.approveAccount = (req, res) => {
+    let datatable = "";
+
+    console.log(req.body);
+
+    if(req.body.type == "tracer") {
+        datatable = Tracer;
+    } else if(req.body.type == "business") {
+        datatable = Business;
+    }
+
+    datatable.update({
+        approved: true
+    },
+    {
+        where: 
+        {
+            id: req.body.id
+        }
+    })
+    .then(account => {
+        res.status(200).send(account); 
+    });
+};
+
+exports.rejectAccount = (req, res) => {
+    let datatable = "";
+
+    if(req.body.type = "tracer") {
+        datatable = Tracer;
+    } else if(req.body.type = "business") {
+        datatable = Business;
+    }
+
+    datatable.findOne({
+        where: { id: req.body.id },
+        include: [{
+            model: User,
+            required: true
+        }] 
+    })
+    .then(account => {
+        User.destroy({where: {id: account.User.id}});
+    })
+    .then(() => {
+        res.status(200).send("User has been rejected"); 
+    });
+};
+
 //Query the database to find all checkins that have a certain location
 exports.queryLocation = (req, res) => {
-    CheckIn.findAll({where: {location: req.body.location}})
+    CheckIn.findAll({where: {location: req.params.location}})
     .then(data => {
         res.status(200).send(data); 
     });
@@ -89,13 +141,31 @@ exports.queryLocation = (req, res) => {
 
 //Query the database to find all checkins that fall between a set time period
 exports.queryTime = (req, res) => {
-    CheckIn.findAll({
-        createdAt: {
-            $between: [req.body.startDate, req.body.endDate]
-        }
-    })
+    // CheckIn.findAll({
+    //     createdAt: {
+    //         $between: [req.params.startTime, req.params.endTime]
+    //     }
+    // })
+
+    //raw data search for now
+    CheckIn.findAll()
     .then(data => {
-        res.status(200).send(data); 
+        let accounts = [];
+
+        let startTime = new Date(req.params.startTime);
+        let endTime = new Date(req.params.endTime);
+
+        data.forEach(account => {
+            let checkinTime = new Date(account.createdAt);
+            console.log("CHECKIN: " + checkinTime);
+            if(checkinTime >= startTime && checkinTime <= endTime) {
+                accounts.push(account);
+            } else {
+                console.log("Out of date range");
+            }
+        });
+
+        res.status(200).send(accounts); 
     });
 };
 
@@ -104,17 +174,18 @@ exports.queryTime = (req, res) => {
 //Phone for people doing manual checkin
 exports.queryIndividual = (req, res) => {
     Public.findOne({
-        where: {
-            username: req.body.username
-        }
+        include: [{
+            model: User,
+            where: {username: req.params.username}
+        }] 
     })
     .then(user => {
         //If there is a user collect check ins via the user id
         //else get it by the phone number
         if(user) {
-            return CheckIn.findAll({where: {UserId: user.id}});
+            return CheckIn.findAll({where: {UserId: user.User.id}});
         } else {
-            return CheckIn.findAll({where: {phone: req.body.phone}});
+            return CheckIn.findAll({where: {phone: req.params.phone}});
         }   
     })
     .then(checkins => {
@@ -159,9 +230,13 @@ exports.createCheckin = (req, res) => {
     .then(user => {
         // Link a check in to the user if there is one
         if(user) {
-            CheckIn.create({
-                location: location,
-                UserId: user.id
+            Public.findOne({where: {UserId: user.id}}).then(public => {
+                CheckIn.create({
+                    location: location,
+                    name: public.name,
+                    phone: public.phone,
+                    UserId: user.id
+                });
             });
         } else { // Create a new check in based off the manual check in
             CheckIn.create({

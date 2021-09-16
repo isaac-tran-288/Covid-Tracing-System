@@ -37,6 +37,30 @@ module.exports = function (app) {
         [authJwt.verifyToken, authJwt.isAdmin],
         controller.adminBoard
     );
+    
+    app.get(
+        "/api/admin/approval/business",
+        //[authJwt.verifyToken, authJwt.isAdmin],
+        controller.businessApprovals
+    );
+
+    app.get(
+        "/api/admin/approval/tracers",
+        //[authJwt.verifyToken, authJwt.isAdmin],
+        controller.tracerApprovals
+    );
+
+    app.put(
+        "/api/admin/account/approve",
+        //[authJwt.verifyToken, authJwt.isAdmin],
+        controller.approveAccount
+    );
+
+    app.delete(
+        "/api/admin/account/reject",
+        [authJwt.verifyToken, authJwt.isAdmin],
+        controller.rejectAccount
+    );
 
     //Contact tracer routes
     //==================================
@@ -47,32 +71,20 @@ module.exports = function (app) {
     );
 
     app.get(
-        "/api/tracer/approval/business",
-        [authJwt.verifyToken, authJwt.isTracer],
-        controller.businessApprovals
-    );
-
-    app.get(
-        "/api/tracer/approval/tracers",
-        [authJwt.verifyToken, authJwt.isTracer],
-        controller.tracerApprovals
-    );
-
-    app.get(
-        "/api/tracer/query/location",
-        [authJwt.verifyToken, authJwt.isTracer],
+        "/api/tracer/query/location/:location",
+        //[authJwt.verifyToken, authJwt.isTracer],
         controller.queryLocation
     );
 
     app.get(
-        "/api/tracer/query/time",
-        [authJwt.verifyToken, authJwt.isTracer],
+        "/api/tracer/query/time/:startTime/:endTime",
+        //[authJwt.verifyToken, authJwt.isTracer],
         controller.queryTime
     );
 
     app.get(
-        "/api/tracer/query/individual",
-        [authJwt.verifyToken, authJwt.isTracer],
+        "/api/tracer/query/individual/:phone/:username",
+        //[authJwt.verifyToken, authJwt.isTracer],
         controller.queryIndividual
     );
 

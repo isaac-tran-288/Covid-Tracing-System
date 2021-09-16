@@ -43,12 +43,12 @@ exports.signup = (req, res) => {
 
         switch(roleName) {
             case "business": //create business table
-                accountInfo.approved = true; //set the approval false by default (true for testing)
+                accountInfo.approved = false; //set the approval false by default (true for testing)
                 Business.create(accountInfo).catch(err => {res.status(500).send({ message: err.message });});
                 break;
     
             case "tracer": //create contact tracer table
-                accountInfo.approved = true; //set the approval false by default (true for testing)
+                accountInfo.approved = false; //set the approval false by default (true for testing)
                 Tracer.create(accountInfo).catch(err => {res.status(500).send({ message: err.message });});
                 break;
     
@@ -107,7 +107,7 @@ exports.signin = (req, res) => {
         }
 
         //Check the approval of the account if it has a business or tracer role
-        if((account.roleName == "business" || account.roleName == "tracer") && !account.approved) {
+        if((account.User.Role.name == "business" || account.User.Role.name == "tracer") && !account.approved) {
             return res.status(404).send({ message: "Account has not been approved yet." });
         }
 
@@ -123,7 +123,7 @@ exports.signin = (req, res) => {
             });
         }
 
-        let token = jwt.sign({ id: account.id }, config.secret, {
+        let token = jwt.sign({ id: account.User.id }, config.secret, {
             expiresIn: 86400 // 24 hours
         });
 

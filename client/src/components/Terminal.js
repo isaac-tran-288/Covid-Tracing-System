@@ -4,9 +4,10 @@ import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import UserService from "../services/user.service";
 import Scanner from "react-webcam-qr-scanner";
+import Confirmation from "./Confirmation";
 
 
-const Terminal = () => {
+const Terminal = props => {
     const [content, setContent] = useState("");
 
     useEffect(() => {
@@ -72,7 +73,8 @@ const Terminal = () => {
             UserService.checkin(data).then(
                 () => {
                     //Put some confirmation of checkin here
-                    window.location.reload();
+                    props.history.push('/confirmation');
+                    //window.location.reload();
                 },
                 (error) => {
                     const resMessage =
@@ -99,6 +101,9 @@ const Terminal = () => {
                 ...prevState,
                 username: result.data,
             }));
+            setTimeout(() => {
+                props.history.push('/confirmation');
+            }, 1000) // render for 5 seconds and then push to home 
             // handleSumitScan();          
         }
     }
