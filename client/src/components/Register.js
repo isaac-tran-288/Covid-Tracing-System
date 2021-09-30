@@ -3,6 +3,9 @@ import Form from "react-validation/build/form";
 import CheckButton from "react-validation/build/button";
 import { isEmail } from "validator";
 
+//Show the QRCode when a user registers
+import QRCode from 'react-qr-code';
+
 //import the different forms
 import PublicForm from "./authentication/registerForms/public.form";
 import BusinessForm from "./authentication/registerForms/business.form";
@@ -168,13 +171,34 @@ const Register = (props) => {
                     )}
 
                     {message && (
-                        <div className="form-group">
-                            <div
-                                className={successful ? "alert alert-success" : "alert alert-danger"}
-                                role="alert"
-                            >
-                                {message}
+                        <div className="text-center">
+                            <div className="form-group">
+                                <div
+                                    className={successful ? "alert alert-success" : "alert alert-danger"}
+                                    role="alert"
+                                >
+                                    {message}
+                                    
+                                </div>
                             </div>
+
+                            {/*Show a 'public' user their QR code once they have registered */}
+                            {data.role === "public" && (
+                                <div>
+                                    <strong>QR Code:</strong><br />
+
+                                    <QRCode value={data.username} />
+
+                                    <br />
+                                    <br />
+
+                                    <p style={{ maxWidth: "400px" }}>
+                                        This is your unqiue QR code. 
+                                        You can screen shot it to use it from your phones 
+                                        gallery when checking in or login to display it on your screen.
+                                    </p>
+                                </div>
+                            )}
                         </div>
                     )}
                     <CheckButton style={{ display: "none" }} ref={checkBtn} />

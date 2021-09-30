@@ -19,26 +19,6 @@ exports.memberBoard = (req, res) => {
     res.status(200).send("Member Content.");
 };
 
-//Find the user associated with the input details
-//Create a checkin based on the input details (registered user or manual checkin)
-exports.checkin = (req, res) => {
-    User.findOne({ where: {username: req.body.username}})
-    .then(user => {
-        if(user) {
-            CheckIn.create({
-                location: req.body.location,
-                UserId: user.id
-            });
-        } else {
-            CheckIn.create({
-                location: req.body.location,
-                name: req.body.location,
-                phone: req.body.phone
-            });
-        }
-    });
-};
-
 //==========================================================================
 // BUSINESS FUNCTIONS
 //==========================================================================
@@ -109,15 +89,15 @@ exports.approveAccount = (req, res) => {
 
 exports.rejectAccount = (req, res) => {
     let datatable = "";
-
-    if(req.body.type = "tracer") {
+    
+    if(req.params.type == "tracer") {
         datatable = Tracer;
-    } else if(req.body.type = "business") {
+    } else if(req.params.type == "business") {
         datatable = Business;
     }
 
     datatable.findOne({
-        where: { id: req.body.id },
+        where: { id: req.params.id },
         include: [{
             model: User,
             required: true
@@ -216,6 +196,7 @@ exports.terminalBoard = (req, res) => {
 //==========================================================================
 
 exports.createCheckin = (req, res) => {
+    console.log(req.body);
     let location = "";
 
     //Find which terminal is logging in
@@ -236,18 +217,30 @@ exports.createCheckin = (req, res) => {
                     name: public.name,
                     phone: public.phone,
                     UserId: user.id
+                })
+                .then(() => {
+                    res.status(200).send("Checked in."); 
+                })
+                .catch(err => {
+                    res.status(500).send({ message: err.message });
                 });
             });
-        } else { // Create a new check in based off the manual check in
+        } else if (req.body.username == "") { // Create a new check in based off the manual check in if username is null
             CheckIn.create({
                 location: location,
                 name: req.body.name,
                 phone: req.body.phone
+            })
+            .then(() => {
+                return res.status(200).send("Checked in."); 
+            })
+            .catch(err => {
+                return res.status(500).send({ message: err.message });
             });
+        } else { //not a valid QR code
+            return res.status(404).send({ message: "Not a valid QR code" });
         }
     }).catch(err => {
-        res.status(500).send({ message: err.message });
+        return res.status(500).send({ message: err.message });
     });
-
-    res.status(200).send("Checked in."); 
 };
