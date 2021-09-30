@@ -1,0 +1,28 @@
+#button_group {
+    margin-bottom: 25px;
+}
+
+.row_account {
+    min-width: 550px;
+    outline: 2px solid black;
+    padding: 5px;
+    list-style: none;
+    margin-bottom: 15px;
+}
+
+.image_button {
+    border:none;
+    background-color:transparent;
+    outline:none;
+}
+
+.icon_button {
+    height: 30px;
+    width: 30px;
+}
+
+button {
+    border:none;
+    background-color:transparent;
+    outline:none;
+ }
