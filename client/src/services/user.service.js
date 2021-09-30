@@ -45,7 +45,7 @@ const approveAccount = data => {
 }
 
 const rejectAccount = data => {
-    return axios.delete("/api/admin/account/reject", data);
+    return axios.delete("/api/admin/account/reject/" + data.id + "/" + data.type);
 }
 
 //TRACER FUNCTIONS

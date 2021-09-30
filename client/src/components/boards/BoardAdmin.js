@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-
+import "./board.css";
 import UserService from "../../services/user.service";
 
 const BoardAdmin = () => {
     const [content, setContent] = useState("");
+    const [clicked, setClicked] = useState(false);
 
     useEffect(() => {
         UserService.getAdminBoard().then(
@@ -26,10 +27,11 @@ const BoardAdmin = () => {
     const [data, setData] = useState([]);
 
     const getBusinessApprovals = (e) => {
+        setClicked(true);
         UserService.approvalBusiness().then(
             result => {
                 //for each result create a div with account id as id, details as text and accept/reject button
-                console.log(result.data);
+                //console.log(result.data);
                 setData(result.data);
             },
             (error) => {
@@ -39,6 +41,7 @@ const BoardAdmin = () => {
     };
 
     const getTracerApprovals = (e) => {
+        setClicked(true);
         UserService.approvalTracers().then(
             result => {
                 //for each result create a div with account id as id, details as text and accept/reject button
@@ -52,14 +55,16 @@ const BoardAdmin = () => {
     };
 
     const approve = (e) => {
-        let data = {
-            id: e.target.parentNode.id,
-            type: e.target.parentNode.type
+        let account = {
+            id: e.target.closest('.row_account').id,
+            type: e.target.closest('.row_account').type
         }
 
-        UserService.approveAccount(data).then(
+        UserService.approveAccount(account).then(
             result => {
-                //for each result create a div with account id as id, details as text and accept/reject button
+                //change the li to a generic accepted image 
+                document.getElementById(account.id).innerHTML = "ACCEPTED";
+                document.getElementById(account.id).className += "d-flex justify-content-center";
                 console.log(result);
             },
             (error) => {
@@ -69,14 +74,18 @@ const BoardAdmin = () => {
     }
 
     const reject = (e) => {
-        let data = {
-            id: e.target.parentNode.id,
-            type: e.target.parentNode.type
+        let account = {
+            id: e.target.closest('.row_account').id,
+            type: e.target.closest('.row_account').type
         }
 
-        UserService.rejectAccount(data).then(
+        console.log(account);
+
+        UserService.rejectAccount(account).then(
             result => {
-                //for each result create a div with account id as id, details as text and accept/reject button
+                //change the li to a generic rejected image
+                document.getElementById(account.id).innerHTML = "REJECTED";
+                document.getElementById(account.id).className += "d-flex justify-content-center";
                 console.log(result);
             },
             (error) => {
@@ -86,27 +95,28 @@ const BoardAdmin = () => {
     }
 
     return (
-        <div className="container">
+        <div className="container-fluid">
             <header className="jumbotron">
                 <h3>{content}</h3>
             </header>
 
             <h3>Waiting approval</h3>
 
-            <div>
+            <div id="button_group" className="d-flex justify-content-around">
                 {/* Get all businesses waiting for approval */}
-                <button onClick={getBusinessApprovals}>Businesses</button>
+                <button type="button" className="btn btn-secondary" onClick={getBusinessApprovals}>Businesses</button>
 
                 {/* Get all contact tracers waiting for approval */}
-                <button onClick={getTracerApprovals}>Contact Tracers</button>
+                <button type="button" className="btn btn-secondary" onClick={getTracerApprovals}>Contact Tracers</button>
             </div>
 
             <div>
-                {data.length > 0 ? ( data.map(account => {
+                {/* if the user has clicked and the type of search result (null or found) */}
+                {clicked && (data.length > 0 ? ( data.map(account => {
                     let id = account.id;
                     let name;
                     let type;
-                    if('buinessName' in account) {
+                    if('businessName' in account) {
                         name = account.businessName;
                         type = "business";
                     } else {
@@ -115,11 +125,37 @@ const BoardAdmin = () => {
                     }
                     
                     return (
-                        <li id={id} type={type}>{name}<button onClick={approve}>Approve</button><button onClick={reject}>Reject</button></li>
+                        <li className="row_account" id={id} type={type}>
+                            <div className="d-flex justify-content-between">
+                                Name: {name} 
+                                <br></br> 
+                                Email: {account.email}
+
+                                <div>
+                                    <button className="image_button">
+                                        <img 
+                                            title="approve"
+                                            className="icon_button"
+                                            src={process.env.PUBLIC_URL + '/assets/icon_approve.png'} 
+                                            alt="approve" 
+                                            onClick={approve}/>
+                                    </button>
+                                    &#9; {/* <- this is the symbol for a tab space*/}
+                                    <button className="image_button">
+                                        <img 
+                                            title="reject"
+                                            className="icon_button"
+                                            src={process.env.PUBLIC_URL + '/assets/icon_reject.png'} 
+                                            alt="reject" 
+                                            onClick={reject}/>
+                                    </button>
+                                </div>
+                            </div>
+                        </li>
                     )
                 })) : 
-                    <li></li>
-                }
+                    <li>No approvals waiting.</li>
+                )}
             </div>
         </div>
     );

@@ -57,8 +57,8 @@ module.exports = function (app) {
     );
 
     app.delete(
-        "/api/admin/account/reject",
-        [authJwt.verifyToken, authJwt.isAdmin],
+        "/api/admin/account/reject/:id/:type",
+        //[authJwt.verifyToken, authJwt.isAdmin],
         controller.rejectAccount
     );
 

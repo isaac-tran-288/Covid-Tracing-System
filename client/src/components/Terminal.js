@@ -4,8 +4,13 @@ import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import UserService from "../services/user.service";
 import Scanner from "react-webcam-qr-scanner";
-import Confirmation from "./Confirmation";
 
+let initialState = {
+    username: "",
+    name: "",
+    phone: "",
+    terminalId: ""
+}
 
 const Terminal = props => {
     const [content, setContent] = useState("");
@@ -35,11 +40,11 @@ const Terminal = props => {
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
 
-    const [data, setData] = useState({
-        username: "",
-        name: "",
-        phone: "",
-        terminalId: ""
+    const [data, setData] = useState(initialState);
+
+    const [timer, setTimer] = useState({
+        timeoutID: "",
+        countDown: 10000 //change this to set the timeout for automatic switch between manual and QR checking
     });
 
     //Handle any changes within the form and set the data object accordingly
@@ -49,7 +54,23 @@ const Terminal = props => {
             ...prevState,
             [id]: value,
         }));
+
+        //Clear the current time out and start a new one
+        stopCountDownTimer()
+        startCountDownTimer();
     };
+
+    //start a countdown, at the end change the form type back to QR and reset the data fields
+    function startCountDownTimer() {
+        timer.timeoutID = setTimeout(() => {
+            setData(initialState);
+            setFormType("qr");
+        }, timer.countDown)
+    }
+
+    function stopCountDownTimer() {
+        clearTimeout(timer.timeoutID);
+    }
 
     function validateForm() {
         //return username.length > 0;
@@ -96,15 +117,9 @@ const Terminal = props => {
     const handleDecode = (result) => {
         console.log(result.data);
         if (result && result !== "") {
+            data.username = result.data;
             setFormType("confirm");
-            setData(prevState => ({
-                ...prevState,
-                username: result.data,
-            }));
-            setTimeout(() => {
-                props.history.push('/confirmation');
-            }, 1000) // render for 5 seconds and then push to home 
-            // handleSumitScan();          
+            handleSumbitScan();   
         }
     }
 
@@ -112,14 +127,16 @@ const Terminal = props => {
         console.log(mode);
     }
 
-    const handleSumitScan = () => {
+    const handleSumbitScan = () => {
         const urlParams = new URLSearchParams(window.location.search);
         data.terminalId = urlParams.get('id');
         UserService.checkin(data).then(
             () => {
                 //Put some confirmation of checkin here
-                window.location.reload();
-            },
+                setTimeout(() => {
+                    props.history.push('/confirmation/?id=' + data.terminalId);
+                }, 2000) // render for 5 seconds and then push to home
+            }, //send an error message if a different QR code was used that is not related to the system
             (error) => {
                 const resMessage =
                     (error.response &&
@@ -130,6 +147,11 @@ const Terminal = props => {
 
                 setLoading(false);
                 setMessage(resMessage);
+
+                setTimeout(() => {
+                    setFormType("qr");
+                    setMessage("");
+                }, 2000)
             }
         );
     };
@@ -159,8 +181,12 @@ const Terminal = props => {
                         }}
                         captureSize={{ width: 1280, height: 720 }}
                     />
-                    <button className="btn btn-primary btn-block" onClick={() => handleFormType("manual")}>
-                        <span>Switch To Manual Check-in</span>
+                    <button className="btn btn-primary btn-block" 
+                        onClick={() => {
+                            handleFormType("manual");
+                            startCountDownTimer();
+                        }}>
+                            <span>Switch To Manual Check-in</span>
                     </button>
                 </div>
             )}
@@ -201,14 +227,6 @@ const Terminal = props => {
                             </button>
                         </div>
 
-                        {message && (
-                            <div className="form-group">
-                                <div className="alert alert-danger" role="alert">
-                                    {message}
-                                </div>
-                            </div>
-                        )}
-
                         <CheckButton style={{ display: "none" }} ref={checkBtn} />
                     </Form>
 
@@ -220,10 +238,20 @@ const Terminal = props => {
             {
                 formType === "confirm" && (
                     <div>
+                        {/* placeholder div so that QR does not constantly restart itself */}
 
-                        <label>{"Username: " + data.username}</label>
-                        <button className="btn btn-primary" onClick={handleSumitScan} >Confirm</button>
-                        <button className="btn btn-primary" onClick={() => setFormType("qr")} style={{ marginLeft: 10 }} >Go back To Check In</button>
+                        {/* <button className="btn btn-primary" onClick={handleSumbitScan} >Confirm</button>
+                        <button className="btn btn-primary" onClick={() => setFormType("qr")} style={{ marginLeft: 10 }} >Go back To Check In</button> */}
+
+                        {message ? (
+                            <div className="form-group">
+                                <div className="alert alert-danger" role="alert">
+                                    {message}
+                                </div>
+                            </div>
+                        ) : (
+                            <h4>{"Username: " + data.username}</h4>
+                        )}
                     </div>
                 )
             }
