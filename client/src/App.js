@@ -23,6 +23,7 @@ import SpecificPerson from "./components/tracerview/SpecificPerson";
 import SetOfTime from "./components/tracerview/SetOfTime";
 import Location from "./components/tracerview/Location";
 
+import FontSizeChanger from "react-font-size-changer";
 
 const App = () => {
 
@@ -31,7 +32,32 @@ const App = () => {
             <Navbar />
 
             <div className="auth-wrapper">
-                <div className="auth-inner">
+                <div className="font-changer">
+                    <label htmlFor="changer" style={{ marginRight: "20px"}}>Change font size</label>
+                    <FontSizeChanger
+                        name="changer"
+                        targets={['#target']}
+                        options={{
+                            stepSize: 2,
+                            range: 4
+                        }}
+                        customButtons={{
+                            up: <span style={{ 'fontSize': '36px' }}>A</span>,
+                            down: <span style={{ 'fontSize': '20px' }}>A</span>,
+                            style: {
+                                backgroundColor: 'white',
+                                color: 'black',
+                                WebkitBoxSizing: 'border-box',
+                                WebkitBorderRadius: '5px',
+                                width: '60px',
+                            },
+                            buttonsMargin: 10
+                        }}
+                    />
+                </div>
+
+
+                <div id="target" className="auth-inner" >
                     <Switch>
                         {/* To add new routes simply import the component above and then use the example below */}
                         {/* EXAMPLE */}

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 
 import UserService from "../services/user.service";
 
+import FontSizeChanger from "react-font-size-changer";
+
 const Home = () => {
     const [content, setContent] = useState("");
 
@@ -23,10 +25,22 @@ const Home = () => {
     }, []);
 
     return (
-        <div className="container">
-            <header className="jumbotron">
-                <h3>{content}</h3>
-            </header>
+
+        <div>
+            {/* <FontSizeChanger
+                targets={['#target']}
+                options={{
+                    stepSize: 2,
+                    range: 3
+                }}
+            /> */}
+            <div id="target" className="container">
+
+
+                <header  className="jumbotron">
+                    <h3>{content}</h3>
+                </header>
+            </div>
         </div>
     );
 };

@@ -91,3 +91,10 @@ body, html, .App, #root, .auth-wrapper {
 .margin {
   margin-left: 20px;
 }
+
+.font-changer {
+  display: flex;
+  justify-content: flex-end;
+  /* flex-direction: column; */
+  margin: 20px;
+}
