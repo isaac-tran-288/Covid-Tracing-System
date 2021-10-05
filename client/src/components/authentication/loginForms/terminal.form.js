@@ -30,6 +30,15 @@ const TerminalForm = props => {
                 />
             </div>
 
+            {!props.isVerified && (<div className="form-group" style={{ marginTop: 20 }}>
+                <button className="btn btn-primary btn-block" onClick={props.Verify} disabled={props.loading}>
+                    {props.loading && (
+                        <span className="spinner-border spinner-border-sm"></span>
+                    )}
+                    <span>Verify</span>
+                </button>
+            </div>)}
+
             <div className="form-group">
                 <label htmlFor="terminalId">Terminal ID</label>
                 <Input
@@ -37,6 +46,7 @@ const TerminalForm = props => {
                     className="form-control"
                     name="terminalId"
                     id="terminalId"
+                    disabled={!props.isVerified}
                     value={props.data.terminalId}
                     onChange={props.handleDataChange}
                     validations={[props.required]}
@@ -45,15 +55,20 @@ const TerminalForm = props => {
 
             <div className="form-group">
                 <label htmlFor="location">Location</label>
-                <Input
+                <select
                     type="text"
                     className="form-control"
                     name="location"
                     id="location"
+                    disabled={!props.isVerified}
                     value={props.data.location}
                     onChange={props.handleDataChange}
                     validations={[props.required]}
-                />
+                >
+                    {props.locations.map(address => 
+                        <option>{address}</option> )
+                    }
+                </select>
             </div>
         </div>
     );

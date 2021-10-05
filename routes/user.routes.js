@@ -30,6 +30,11 @@ module.exports = function (app) {
         controller.businessBoard
     );
 
+    app.put(
+        "/api/business/location",
+        controller.newBusinessLocation
+    );
+
     //Admininstrator routes
     //==================================
     app.get(

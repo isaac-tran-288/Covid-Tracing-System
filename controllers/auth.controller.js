@@ -139,6 +139,43 @@ exports.signin = (req, res) => {
     });
 };
 
+exports.verifyBusiness = (req, res) => {
+    Business.findOne({
+        where: { email: req.body.email },
+        include: [{
+            model: User,
+            required: true,
+            include: [{
+                model: Role,
+                required: true
+            }]
+        }] 
+    })
+    .then(business => {
+        if (!business) {
+            return res.status(404).send({ message: "User Not found." });
+        }
+
+        let passwordIsValid = bcrypt.compareSync(
+            req.body.password,
+            business.User.password
+        );
+
+        if (!passwordIsValid) {
+            return res.status(401).send({
+                accessToken: null,
+                message: "Invalid Password!"
+            });
+        };
+
+        //send back the locations for the business account
+        res.status(200).send({ success: true, locations: business.locations });
+    })
+    .catch(err => {
+        res.status(500).send({ message: err.message });
+    });
+}
+
 exports.terminalSignin = (req, res) => {
     let businessId;
 

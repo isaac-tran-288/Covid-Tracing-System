@@ -25,6 +25,11 @@ const getTerminalBoard = () => {
     return axios.get("/api/test/terminal", { headers: authHeader() });
 };
 
+//BUSINESS FUNCTIONS
+const newBusinessLocation = data => {
+    return axios.put("/api/business/location", data);
+}
+
 //CHECKIN FUNCTIONS
 const checkin = data => {
     console.log(data);
@@ -74,6 +79,7 @@ export default {
     getTracerBoard,
     getAdminBoard,
     getTerminalBoard,
+    newBusinessLocation,
     checkin,
     approvalBusiness,
     approvalTracers,

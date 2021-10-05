@@ -26,7 +26,45 @@ exports.memberBoard = (req, res) => {
 exports.businessBoard = (req, res) => {
     // Government announcements (related to businesses)
     // Number of checkins to their business (all locations)
-    res.status(200).send("Business Content.");
+    Business.findOne({
+        where: {
+            UserId: req.userId
+        }
+    })
+    .then(account => {
+        if(account.locations == null) {
+            account.locations = [];
+        }
+        console.log(account.locations);
+
+        let data = {
+            content: "Business Content.",
+            locations: account.locations
+        }
+
+        res.status(200).send(data);
+    })
+    .catch(err => {
+        return res.status(500).send({ message: err.message });
+    });
+};
+
+exports.newBusinessLocation = (req, res) => {
+    //Adding a business location
+    Business.update({
+        locations: req.body.locations
+    },
+    {
+        where: {
+            email: req.body.email
+        }
+    })
+    .then(() => {
+        return Business.findOne({where: {email: req.body.email}});
+    })
+    .then(account => {
+        res.status(200).send(account.locations); 
+    });
 };
 
 //==========================================================================

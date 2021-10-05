@@ -41,7 +41,6 @@ isAdmin = (req, res, next) => {
 isBusiness = (req, res, next) => {
     User.findByPk(req.userId).then(account => {
         db.Role.findByPk(account.RoleId).then(result => {
-            console.log(account);
             if (result.name === "business") {
                 next();
                 return;
