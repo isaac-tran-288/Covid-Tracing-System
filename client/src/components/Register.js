@@ -71,8 +71,7 @@ const Register = (props) => {
         name:"",
         email: "",
         phone: "",
-        businessName: "",
-        location: {}
+        businessName: ""
     });
     
     const [successful, setSuccessful] = useState(false);
@@ -146,64 +145,64 @@ const Register = (props) => {
 
     return (
         <div className="col-md-12">
-                <div className="card-title">
-                    {props.title}
-                </div>
-
-                <Form onSubmit={handleRegister} ref={form}>
-                    {/* Depending on what role was passed from App.js through props we can load a specific
-                    form for registering a user and pass the params object containing the validation and event
-                    triggers */}
-                    {(!successful && props.role === "public") && (
-                        <PublicForm {...params}/>
-                    )}
-
-                    {(!successful && props.role === "business") && (
-                        <BusinessForm {...params}/>
-                    )}
-
-                    {(!successful && props.role === "tracer") && (
-                        <TracerForm {...params}/>
-                    )}
-
-                    {(!successful && props.role === "admin") && (
-                        <AdminForm {...params}/>
-                    )}
-
-                    {message && (
-                        <div className="text-center">
-                            <div className="form-group">
-                                <div
-                                    className={successful ? "alert alert-success" : "alert alert-danger"}
-                                    role="alert"
-                                >
-                                    {message}
-                                    
-                                </div>
-                            </div>
-
-                            {/*Show a 'public' user their QR code once they have registered */}
-                            {data.role === "public" && (
-                                <div>
-                                    <strong>QR Code:</strong><br />
-
-                                    <QRCode value={data.username} />
-
-                                    <br />
-                                    <br />
-
-                                    <p style={{ maxWidth: "400px" }}>
-                                        This is your unqiue QR code. 
-                                        You can screen shot it to use it from your phones 
-                                        gallery when checking in or login to display it on your screen.
-                                    </p>
-                                </div>
-                            )}
-                        </div>
-                    )}
-                    <CheckButton style={{ display: "none" }} ref={checkBtn} />
-                </Form>
+            <div className="card-title">
+                {props.title}
             </div>
+
+            <Form onSubmit={handleRegister} ref={form}>
+                {/* Depending on what role was passed from App.js through props we can load a specific
+                form for registering a user and pass the params object containing the validation and event
+                triggers */}
+                {(!successful && props.role === "public") && (
+                    <PublicForm {...params}/>
+                )}
+
+                {(!successful && props.role === "business") && (
+                    <BusinessForm {...params}/>
+                )}
+
+                {(!successful && props.role === "tracer") && (
+                    <TracerForm {...params}/>
+                )}
+
+                {(!successful && props.role === "admin") && (
+                    <AdminForm {...params}/>
+                )}
+
+                {message && (
+                    <div className="text-center">
+                        <div className="form-group">
+                            <div
+                                className={successful ? "alert alert-success" : "alert alert-danger"}
+                                role="alert"
+                            >
+                                {message}
+                                
+                            </div>
+                        </div>
+
+                        {/*Show a 'public' user their QR code once they have registered */}
+                        {data.role === "public" && (
+                            <div>
+                                <strong>QR Code:</strong><br />
+
+                                <QRCode value={data.username} />
+
+                                <br />
+                                <br />
+
+                                <p style={{ maxWidth: "400px" }}>
+                                    This is your unqiue QR code. 
+                                    You can screen shot it to use it from your phones 
+                                    gallery when checking in or login to display it on your screen.
+                                </p>
+                            </div>
+                        )}
+                    </div>
+                )}
+                <CheckButton style={{ display: "none" }} ref={checkBtn} />
+            </Form>
+        </div>
     );
 };
 

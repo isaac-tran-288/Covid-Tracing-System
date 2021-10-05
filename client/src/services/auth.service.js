@@ -30,6 +30,11 @@ export default {
       });
   },
 
+  //Verify business details
+  verifyBusiness: data => {
+    return axios.post("/api/auth/verifyBusiness/", data);
+  },
+
   logout: () => {
     localStorage.removeItem("user");
   },

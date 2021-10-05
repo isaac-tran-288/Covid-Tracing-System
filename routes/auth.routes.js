@@ -23,10 +23,15 @@ module.exports = function (app) {
     controller.signin
   );
 
+  //verify a business
+  app.post(
+    "/api/auth/verifyBusiness",
+    controller.verifyBusiness
+  );
+
   //Authenicating a terminal
   app.post(
     "/api/auth/terminal/signin",
     controller.terminalSignin
   );
 };
-

@@ -21,6 +21,8 @@ const Login = (props) => {
     const form = useRef();
     const checkBtn = useRef();
     
+    const [isVerified, setVerified] = useState(false);
+    const [locations, setLocations] = useState([]);
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
 
@@ -33,7 +35,6 @@ const Login = (props) => {
         //Above is for user login
         //Below is for terminal login
         email: "",
-        
         terminalId: "",
         location: "",
     });
@@ -85,12 +86,44 @@ const Login = (props) => {
         }
     };
 
+    //Check the database to see if the business details are correct
+    const Verify = e => {
+        e.preventDefault();
+
+        AuthService.verifyBusiness(data).then(
+            result => {
+                if(result.data.locations.length > 0) {
+                    setLocations(result.data.locations);
+                    setVerified(result.data.success);
+                } else {
+                    setMessage("No locations, login to the business account to add some.");
+                }
+            },
+            (error) => {
+                const resMessage =
+                    (error.response &&
+                        error.response.data &&
+                        error.response.data.message) ||
+                    error.message ||
+                    error.toString();
+
+                setLoading(false);
+                setMessage(resMessage);
+            }
+        );
+    }
+
     //NOTE: all the variables and functions that are passed to the
     //forms, can pass all the validation methods regardless of if
     //the form needs it or not.
     const params = {
         data:data,
+        loading:loading,
         handleDataChange:handleDataChange,
+        //business verfication
+        isVerified: isVerified,
+        Verify:Verify,
+        locations: locations,
         //add in validation methods below
         required:required,
     } 
