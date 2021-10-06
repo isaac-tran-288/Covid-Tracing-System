@@ -55,11 +55,13 @@ const rejectAccount = data => {
 
 //TRACER FUNCTIONS
 const locationQuery = data => {
-    return axios.get("/api/tracer/query/location/" + data.location);
-}
-
-const timeQuery = data => {
-    return axios.get("/api/tracer/query/time/" + data.startTime._d + "/" + data.endTime._d);
+    return axios.get(
+        "/api/tracer/query/location/" 
+        + data.location + "/" 
+        + data.startTime._d + "/" 
+        + data.endTime._d + "/" 
+        + data.extended
+    );
 }
 
 const individualQuery = data => {
@@ -69,7 +71,14 @@ const individualQuery = data => {
         data.username = "null";
     }
     
-    return axios.get("/api/tracer/query/individual/" + data.phone + "/" + data.username);
+    return axios.get(
+        "/api/tracer/query/individual/" 
+        + data.phone + "/" 
+        + data.username + "/" 
+        + data.startTime._d + "/" 
+        + data.endTime._d + "/" 
+        + data.extended
+    );
 }
 
 export default {
@@ -86,6 +95,5 @@ export default {
     approveAccount,
     rejectAccount,
     locationQuery,
-    timeQuery,
     individualQuery
 };

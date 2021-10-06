@@ -76,19 +76,19 @@ module.exports = function (app) {
     );
 
     app.get(
-        "/api/tracer/query/location/:location",
+        "/api/tracer/query/location/:location/:startTime/:endTime/:extended",
         //[authJwt.verifyToken, authJwt.isTracer],
         controller.queryLocation
     );
 
-    app.get(
-        "/api/tracer/query/time/:startTime/:endTime",
-        //[authJwt.verifyToken, authJwt.isTracer],
-        controller.queryTime
-    );
+    // app.get(
+    //     "/api/tracer/query/time/:startTime/:endTime",
+    //     //[authJwt.verifyToken, authJwt.isTracer],
+    //     controller.queryTime
+    // );
 
     app.get(
-        "/api/tracer/query/individual/:phone/:username",
+        "/api/tracer/query/individual/:phone/:username/:startTime/:endTime/:extended",
         //[authJwt.verifyToken, authJwt.isTracer],
         controller.queryIndividual
     );
