@@ -10,6 +10,7 @@ import Register from "./components/Register";
 
 import Home from "./components/Home";
 import Profile from "./components/Profile";
+import Help from "./components/Help";
 
 import BoardMember from "./components/boards/BoardMember";
 import BoardBusiness from "./components/boards/BoardBusiness";
@@ -23,6 +24,7 @@ import SpecificPerson from "./components/tracerview/SpecificPerson";
 import SetOfTime from "./components/tracerview/SetOfTime";
 import Location from "./components/tracerview/Location";
 
+import FontSizeChanger from "react-font-size-changer";
 
 const App = () => {
 
@@ -31,7 +33,32 @@ const App = () => {
             <Navbar />
 
             <div className="auth-wrapper">
-                <div className="auth-inner">
+                <div className="font-changer">
+                    <label htmlFor="changer" style={{ marginRight: "20px"}}>Change font size</label>
+                    <FontSizeChanger
+                        name="changer"
+                        targets={['#target']}
+                        options={{
+                            stepSize: 2,
+                            range: 4
+                        }}
+                        customButtons={{
+                            up: <span style={{ 'fontSize': '36px' }}>A</span>,
+                            down: <span style={{ 'fontSize': '20px' }}>A</span>,
+                            style: {
+                                backgroundColor: 'white',
+                                color: 'black',
+                                WebkitBoxSizing: 'border-box',
+                                WebkitBorderRadius: '5px',
+                                width: '60px',
+                            },
+                            buttonsMargin: 10
+                        }}
+                    />
+                </div>
+
+
+                <div id="target" className="auth-inner" >
                     <Switch>
                         {/* To add new routes simply import the component above and then use the example below */}
                         {/* EXAMPLE */}
@@ -48,6 +75,7 @@ const App = () => {
                         {/* Home path for all account, can have general information here */}
                         <Route exact path={"/"} component={Home} />
                         <Route exact path={"/home"} component={Home} />
+                        <Route exact path={"/help"} component={Help} />
                         {/* Authentication routes */}
                         <Route exact path="/login" render={props => <Login {...props} title="USER LOGIN" role="public" />} />
                         <Route exact path="/login/business" render={props => <Login {...props} title="BUSINESS LOGIN" role="business" />} />
