@@ -25,6 +25,10 @@ export default {
         if (response.data.accessToken) {
           localStorage.setItem("user", JSON.stringify(response.data));
         }
+
+        if(data.role === "terminal") {
+          localStorage.setItem("terminal", response.data.terminalId);
+        }
   
         return response.data;
       });
@@ -37,9 +41,14 @@ export default {
 
   logout: () => {
     localStorage.removeItem("user");
+    localStorage.removeItem("terminal");
   },
 
   getCurrentUser: () => {
     return JSON.parse(localStorage.getItem("user"));
+  },
+
+  getCurrentTerminal: () => {
+    return JSON.parse(localStorage.getItem("terminal"));
   }
 }

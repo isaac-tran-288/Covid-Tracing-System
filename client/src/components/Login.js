@@ -54,6 +54,11 @@ const Login = (props) => {
         setMessage("");
         setLoading(true);
 
+        if(props.role == "terminal" && (data.location == "" || data.location == "Click to select")) {
+            setMessage("Please select a location.");
+            return;
+        }
+
         form.current.validateAll();
 
         if (checkBtn.current.context._errors.length === 0) {
@@ -138,19 +143,33 @@ const Login = (props) => {
                 <Form onSubmit={handleLogin} ref={form}>
                     {/* Determine if logging in a user or a terminal and present the correct form */}
                     {props.role === "terminal" ? (
-                        <TerminalForm {...params}/>
-                    ) :
-                        <UserForm  {...params}/>
-                    }
+                        <div>
+                            <TerminalForm {...params}/>
 
-                    <div className="form-group" style={{ marginTop: 20 }}>
-                        <button className="btn btn-primary btn-block" disabled={loading}>
-                            {loading && (
-                                <span className="spinner-border spinner-border-sm"></span>
+                            {isVerified && (
+                                <div className="form-group" style={{ marginTop: 20 }}>
+                                    <button className="btn btn-primary btn-block" disabled={loading}>
+                                        {loading && (
+                                            <span className="spinner-border spinner-border-sm"></span>
+                                        )}
+                                        <span>Login</span>
+                                    </button>
+                                </div> 
                             )}
-                            <span>Login</span>
-                        </button>
-                    </div>
+                        </div>
+                    ) :
+                        <div>
+                            <UserForm  {...params}/>
+                            <div className="form-group" style={{ marginTop: 20 }}>
+                                <button className="btn btn-primary btn-block" disabled={loading}>
+                                    {loading && (
+                                        <span className="spinner-border spinner-border-sm"></span>
+                                    )}
+                                    <span>Login</span>
+                                </button>
+                            </div> 
+                        </div>
+                    }
 
                     {message && (
                         <div className="form-group">

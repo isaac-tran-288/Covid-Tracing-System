@@ -10,9 +10,15 @@ const Navbar = () => {
     const [showTracerBoard, setShowTracerBoard] = useState(false);
     const [showPublicBoard, setShowPublicBoard] = useState(false);
     const [currentUser, setCurrentUser] = useState(undefined);
+    const [currentTerminal, setCurrentTerminal] = useState(false);
 
     useEffect(() => {
         const user = AuthService.getCurrentUser();
+        const terminal = AuthService.getCurrentTerminal();
+
+        if(terminal) {
+            setCurrentTerminal(true);
+        }
 
         if (user) {
             setCurrentUser(user);
@@ -72,11 +78,6 @@ const Navbar = () => {
                                 </Link>
                             </NavDropdown.Item>
                             <NavDropdown.Item>
-                                <Link to={"/tracer/time"} className="nav-link">
-                                    View By Time
-                                </Link>
-                            </NavDropdown.Item>
-                            <NavDropdown.Item>
                                 <Link to={"/tracer/location"} className="nav-link">
                                     View by Location
                                 </Link>
@@ -86,13 +87,14 @@ const Navbar = () => {
                 )}
             </div>
 
-            {currentUser ? (
+            {(currentUser || currentTerminal) ? (
                 <div className="navbar-nav ml-auto">
+                    {currentUser && (
                     <li className="nav-item">
                         <Link to={"/profile"} className="nav-link">
                             {currentUser.username}
                         </Link>
-                    </li>
+                    </li>)}
                     <li className="nav-item justify-content-end">
                         <a href="/home" className="nav-link" onClick={logOut}>
                             LogOut
@@ -100,7 +102,6 @@ const Navbar = () => {
                     </li>
                 </div>
             ) : (
-
                 <div className="navbar-nav ml-auto">
                     <NavDropdown id="nav-dropdown-dark-example" title="Login" menuVariant="light">
                         <NavDropdown.Item>

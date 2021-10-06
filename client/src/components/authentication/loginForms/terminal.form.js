@@ -65,6 +65,8 @@ const TerminalForm = props => {
                     onChange={props.handleDataChange}
                     validations={[props.required]}
                 >
+                    <option>Click to select</option>
+
                     {props.locations.map(address => 
                         <option>{address}</option> )
                     }
