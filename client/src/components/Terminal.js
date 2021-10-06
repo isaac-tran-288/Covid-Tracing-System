@@ -119,7 +119,7 @@ const Terminal = props => {
         if (result && result !== "") {
             data.username = result.data;
             setFormType("confirm");
-            handleSumbitScan();   
+            handleSumbitScan();
         }
     }
 
@@ -167,9 +167,10 @@ const Terminal = props => {
 
             {formType === "qr" && (
                 <div>
-                    <label>Scanning QR Code</label>
-                    
+                    <label htmlFor="scanner" >Scanning QR Code</label>
+
                     <Scanner
+                        name="scanner"
                         className="camera border border-dark"
                         onDecode={handleDecode}
                         onScannerLoad={handleScannerLoad}
@@ -181,13 +182,15 @@ const Terminal = props => {
                         }}
                         captureSize={{ width: 1280, height: 720 }}
                     />
-                    <button className="btn btn-primary btn-block" 
-                        onClick={() => {
-                            handleFormType("manual");
-                            startCountDownTimer();
-                        }}>
+                    <div className="form-group" style={{ marginTop: 20 }}>
+                        <button className="btn btn-primary btn-block"
+                            onClick={() => {
+                                handleFormType("manual");
+                                startCountDownTimer();
+                            }}>
                             <span>Switch To Manual Check-in</span>
-                    </button>
+                        </button>
+                    </div>
                 </div>
             )}
             {formType === "manual" && (
@@ -230,7 +233,7 @@ const Terminal = props => {
                         <CheckButton style={{ display: "none" }} ref={checkBtn} />
                     </Form>
 
-                    <button className="btn btn-primary btn-block" onClick={() => handleFormType("qr")} style={{ marginTop: 20}} >
+                    <button className="btn btn-primary btn-block" onClick={() => handleFormType("qr")} style={{ marginTop: 20 }} >
                         <span>Switch To QR Scanning</span>
                     </button>
                 </div>

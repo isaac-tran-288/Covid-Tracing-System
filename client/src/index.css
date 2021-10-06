@@ -95,6 +95,5 @@ body, html, .App, #root, .auth-wrapper {
 .font-changer {
   display: flex;
   justify-content: flex-end;
-  /* flex-direction: column; */
-  margin: 20px;
+  margin: 50px;
 }
