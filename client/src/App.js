@@ -10,6 +10,7 @@ import Register from "./components/Register";
 
 import Home from "./components/Home";
 import Profile from "./components/Profile";
+import Help from "./components/Help";
 
 import BoardMember from "./components/boards/BoardMember";
 import BoardBusiness from "./components/boards/BoardBusiness";
@@ -74,6 +75,7 @@ const App = () => {
                         {/* Home path for all account, can have general information here */}
                         <Route exact path={"/"} component={Home} />
                         <Route exact path={"/home"} component={Home} />
+                        <Route exact path={"/help"} component={Help} />
                         {/* Authentication routes */}
                         <Route exact path="/login" render={props => <Login {...props} title="USER LOGIN" role="public" />} />
                         <Route exact path="/login/business" render={props => <Login {...props} title="BUSINESS LOGIN" role="business" />} />
