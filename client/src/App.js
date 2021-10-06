@@ -21,6 +21,7 @@ import Terminal from "./components/Terminal";
 import SpecificPerson from "./components/tracerview/SpecificPerson";
 import SetOfTime from "./components/tracerview/SetOfTime";
 import Location from "./components/tracerview/Location";
+import Help from "./components/Help";
 
 
 const App = () => {
@@ -47,6 +48,8 @@ const App = () => {
                         {/* Home path for all account, can have general information here */}
                         <Route exact path={"/"} component={Home} />
                         <Route exact path={"/home"} component={Home} />
+                        {/* Help and support Information */}
+                        <Route exact path={"/Help"} component={Help} />
                         {/* Authentication routes */}
                         <Route exact path="/login" render={props => <Login {...props} title="USER LOGIN" role="public" />} />
                         <Route exact path="/login/business" render={props => <Login {...props} title="BUSINESS LOGIN" role="business" />} />

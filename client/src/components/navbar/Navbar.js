@@ -154,6 +154,11 @@ const Navbar = () => {
                     </NavDropdown>
                 </div>
             )}
+      
+            <Link to={"/Help"} className="text-right">
+                Help!
+            </Link>
+
         </nav>
     );
 }
