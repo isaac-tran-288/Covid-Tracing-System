@@ -44,7 +44,7 @@ body, html, .App, #root, .auth-wrapper {
   justify-content: center;
   flex-direction: column;
   text-align: left;
-  max-height: 700px !important;
+  max-height: 800px !important;
   margin-top: 60px;
 }
 
