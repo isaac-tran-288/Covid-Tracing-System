@@ -138,7 +138,7 @@ const Terminal = props => {
         if (result && result !== "") {
             data.username = result.data;
             setFormType("confirm");
-            handleSumbitScan();   
+            handleSumbitScan();
         }
     }
 
@@ -188,8 +188,8 @@ const Terminal = props => {
 
             {formType === "qr" && (
                 <div>
-                    <label>Scanning QR Code</label>
-                    
+                    <label htmlFor="scanner" >Scanning QR Code</label>
+
                     <Scanner
                         name="scanner"
                         className="camera border border-dark"
@@ -205,6 +205,7 @@ const Terminal = props => {
                     />
 
                     <div className="form-group" style={{ marginTop: 20 }}>
+                      
                         <button className="btn btn-primary btn-block" 
                             onClick={() => {
                                 handleFormType("manual");
@@ -256,7 +257,7 @@ const Terminal = props => {
                         <CheckButton style={{ display: "none" }} ref={checkBtn} />
                     </Form>
 
-                    <button className="btn btn-primary btn-block" onClick={() => handleFormType("qr")} style={{ marginTop: 20}} >
+                    <button className="btn btn-primary btn-block" onClick={() => handleFormType("qr")} style={{ marginTop: 20 }} >
                         <span>Switch To QR Scanning</span>
                     </button>
                 </div>

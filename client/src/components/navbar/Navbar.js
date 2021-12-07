@@ -155,6 +155,16 @@ const Navbar = () => {
                     </NavDropdown>
                 </div>
             )}
+
+            <div className="navbar-nav ml-auto">
+                <li className="nav-item">
+                    <Link to={"/help"} className="nav-link">
+                        Help
+                    </Link>
+                </li>
+            </div>
+
+
         </nav>
     );
 }

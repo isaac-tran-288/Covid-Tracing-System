@@ -6,7 +6,7 @@ exports.allAccess = (req, res) => {
     // - list or maps CFS style
     // Link to COVID-19 vaccine booking websites
     // Government announcements
-    res.status(200).send("Public Content.");
+    res.status(200).send("User Manual for Members of Public");
 };
 
 //==========================================================================
