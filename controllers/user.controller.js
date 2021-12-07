@@ -35,7 +35,6 @@ exports.businessBoard = (req, res) => {
         if(account.locations == null) {
             account.locations = [];
         }
-        console.log(account.locations);
 
         let data = {
             content: "Business Content.",
@@ -153,22 +152,10 @@ exports.rejectAccount = (req, res) => {
 exports.queryLocation = (req, res) => {
     CheckIn.findAll({where: {location: req.params.location}})
     .then(data => {
-        res.status(200).send(data); 
-    });
-};
-
-//Query the database to find all checkins that fall between a set time period
-exports.queryTime = (req, res) => {
-    // CheckIn.findAll({
-    //     createdAt: {
-    //         $between: [req.params.startTime, req.params.endTime]
-    //     }
-    // })
-
-    //raw data search for now
-    CheckIn.findAll()
-    .then(data => {
         let accounts = [];
+        //for extended search only
+        let secondaryAccounts = [];
+        let locations = [];
 
         let startTime = new Date(req.params.startTime);
         let endTime = new Date(req.params.endTime);
@@ -177,13 +164,58 @@ exports.queryTime = (req, res) => {
             let checkinTime = new Date(account.createdAt);
             console.log("CHECKIN: " + checkinTime);
             if(checkinTime >= startTime && checkinTime <= endTime) {
+                account.tier = "first";
                 accounts.push(account);
             } else {
                 console.log("Out of date range");
             }
         });
 
-        res.status(200).send(accounts); 
+        //if using an extended search collect all the checkins of the visiting customers
+        if(req.params.extended === "true") {
+            accounts.forEach(account => {
+                CheckIn.findAll({where: {phone: account.phone}})
+                .then(data => {
+                    //get any locations the user has checked in to after the initial checkin
+                    data.forEach(account => {
+                        let checkinTime = new Date(account.createdAt);
+                        if(checkinTime >= startTime && checkinTime <= endTime) {
+                            let newEntry = {location: account.location, time: checkinTime}
+                            locations.push(newEntry);
+                        }
+                    });
+
+                    locations.forEach(entry => {
+                        CheckIn.findAll({where: {location: entry.location}})
+                        .then(data => {
+                            data.forEach(account => {
+                                let checkinTime = new Date(account.createdAt);
+                                console.log("CHECKIN2: " + checkinTime);
+                                if(checkinTime >= entry.time && checkinTime <= endTime) {
+                                    account.tier = "second";
+                                    secondaryAccounts.push(account);
+                                }
+                            });
+
+                            secondaryAccounts.forEach(account => {
+                                if(accounts.indexOf(account) == -1) {
+                                    accounts.push(account);
+                                }
+                            })
+
+                            console.log(accounts);
+                        });
+                    });
+                });
+            });
+
+            //Change this to an await for asnyc in the future
+            setTimeout(() => {
+                res.status(200).send(accounts);
+            }, 2000) 
+        } else {
+            res.status(200).send(accounts);
+        }
     });
 };
 
@@ -207,7 +239,30 @@ exports.queryIndividual = (req, res) => {
         }   
     })
     .then(checkins => {
-        res.status(200).send(checkins); 
+
+        let accounts = [];
+
+        let startTime = new Date(req.params.startTime);
+        let endTime = new Date(req.params.endTime);
+
+        checkins.forEach(account => {
+            let checkinTime = new Date(account.createdAt);
+            console.log("CHECKIN: " + checkinTime);
+            if(checkinTime >= startTime && checkinTime <= endTime) {
+                accounts.push(account);
+            } else {
+                console.log("Out of date range");
+            }
+        });
+
+        //if using an extended search collect all the locations visited checkin data
+        if(req.params.extended === "true") {
+            //every customer at each location, track their moments from when that first checkin was taken
+
+            console.log("EXTENDED SEARCH");
+        }
+
+        res.status(200).send(accounts); 
     });
 };
 

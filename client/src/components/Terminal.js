@@ -4,6 +4,7 @@ import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import UserService from "../services/user.service";
 import Scanner from "react-webcam-qr-scanner";
+import authService from "../services/auth.service";
 
 let initialState = {
     username: "",
@@ -11,6 +12,16 @@ let initialState = {
     phone: "",
     terminalId: ""
 }
+
+const required = (value) => {
+    if (!value) {
+        return (
+            <div className="alert alert-danger" role="alert">
+                This field is required!
+            </div>
+        );
+    }
+};
 
 const Terminal = props => {
     const [content, setContent] = useState("");
@@ -89,13 +100,15 @@ const Terminal = props => {
 
         if (checkBtn.current.context._errors.length === 0) {
             //Get the current terminals Id to cross check in the backend
-            const urlParams = new URLSearchParams(window.location.search);
-            data.terminalId = urlParams.get('id');
+            const id = authService.getCurrentTerminal();
+            data.terminalId = id;
+
             UserService.checkin(data).then(
                 () => {
                     //Put some confirmation of checkin here
-                    props.history.push('/confirmation');
-                    //window.location.reload();
+                    setTimeout(() => {
+                        props.history.push('/confirmation/?id=' + id);
+                    }, 2000); // render for 2 seconds and then push to home
                 },
                 (error) => {
                     const resMessage =
@@ -107,6 +120,11 @@ const Terminal = props => {
 
                     setLoading(false);
                     setMessage(resMessage);
+
+                    setTimeout(() => {
+                        setFormType("qr");
+                        setMessage("");
+                    }, 2000);
                 }
             );
         } else {
@@ -114,6 +132,7 @@ const Terminal = props => {
         }
 
     }
+
     const handleDecode = (result) => {
         console.log(result.data);
         if (result && result !== "") {
@@ -128,14 +147,16 @@ const Terminal = props => {
     }
 
     const handleSumbitScan = () => {
-        const urlParams = new URLSearchParams(window.location.search);
-        data.terminalId = urlParams.get('id');
+        //Get the current terminals Id to cross check in the backend
+        const id = authService.getCurrentTerminal();
+        data.terminalId = id;
+
         UserService.checkin(data).then(
             () => {
                 //Put some confirmation of checkin here
                 setTimeout(() => {
-                    props.history.push('/confirmation/?id=' + data.terminalId);
-                }, 2000) // render for 5 seconds and then push to home
+                    props.history.push('/confirmation/?id=' + id);
+                }, 2000); // render for 2 seconds and then push to home
             }, //send an error message if a different QR code was used that is not related to the system
             (error) => {
                 const resMessage =
@@ -151,7 +172,7 @@ const Terminal = props => {
                 setTimeout(() => {
                     setFormType("qr");
                     setMessage("");
-                }, 2000)
+                }, 2000);
             }
         );
     };
@@ -170,6 +191,7 @@ const Terminal = props => {
                     <label>Scanning QR Code</label>
                     
                     <Scanner
+                        name="scanner"
                         className="camera border border-dark"
                         onDecode={handleDecode}
                         onScannerLoad={handleScannerLoad}
@@ -181,13 +203,16 @@ const Terminal = props => {
                         }}
                         captureSize={{ width: 1280, height: 720 }}
                     />
-                    <button className="btn btn-primary btn-block" 
-                        onClick={() => {
-                            handleFormType("manual");
-                            startCountDownTimer();
-                        }}>
-                            <span>Switch To Manual Check-in</span>
-                    </button>
+
+                    <div className="form-group" style={{ marginTop: 20 }}>
+                        <button className="btn btn-primary btn-block" 
+                            onClick={() => {
+                                handleFormType("manual");
+                                startCountDownTimer();
+                            }}>
+                                <span>Switch To Manual Check-in</span>
+                        </button>
+                    </div>
                 </div>
             )}
             {formType === "manual" && (
@@ -203,6 +228,7 @@ const Terminal = props => {
                                 id="name"
                                 value={data.name}
                                 onChange={handleDataChange}
+                                validations={[required]}
                             />
                         </div>
                         <div className="form-group" >
@@ -214,9 +240,9 @@ const Terminal = props => {
                                 id="phone"
                                 value={data.phone}
                                 onChange={handleDataChange}
+                                validations={[required]}
                             />
                         </div>
-
 
                         <div className="form-group" style={{ marginTop: 20 }}>
                             <button className="btn btn-primary btn-block" disabled={loading || !validateForm()}>

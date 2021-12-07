@@ -20,7 +20,6 @@ import Terminal from "./components/Terminal";
 import Confirmation from "./components/Confirmation";
 
 import SpecificPerson from "./components/tracerview/SpecificPerson";
-import SetOfTime from "./components/tracerview/SetOfTime";
 import Location from "./components/tracerview/Location";
 
 
@@ -85,7 +84,6 @@ const App = () => {
                         <Route path="/terminal" component={Terminal} />
 
                         <Route path="/tracer/person" component={SpecificPerson} />
-                        <Route path="/tracer/time" component={SetOfTime} />
                         <Route path="/tracer/location" component={Location} />
                     </Switch>
                 </div>

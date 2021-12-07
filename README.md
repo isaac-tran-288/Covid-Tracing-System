@@ -1,4 +1,12 @@
 # Project Studio Group 
+## Initial Setup and Install
+
+Pull the project. 
+Use npm install for packages in the main PSG folder and again for the client folder.
+Configure the settings in the config/db.config.json (development) area for your local database connection.
+Use node server.js on the main folder to start the application, first time running will invoke the initiateData() function which will preseed the database with a bunch of test data. If this is not wanted just comment out initiateData() - line 51 server.js.
+The application will now be running on http://localhost:3001
+
 ## Covid Tracing Application
 
 The Senior Health Officer is proposing a new initiative for COVID tracing. After modelling the age and demographics of checkins with the current COVID SAfe system, they have determined that a disproportionate number of seniors are not being compliant with the system. Survey feedback has indicated that seniors 1) do not understand how to access the app, 2) find manual check-in slow and inconsistently available. The new initiative being proposed will roll-out COVID tracing terminals where the general public can checkin, removing the need for the app on a user’s phone and creating a consistent user experience. They will trial this new system in a few select venues before making it available to a larger number of venues where COVID outbreaks have been known to occur.
@@ -7,6 +15,7 @@ They have approached your team with creating a solution for the new COVID tracin
 
 
 ## ACCOUNT SETUP
+
 There is a multistep structure for the account setups to make verification and authentication a smoother process and keep data seperate from the login credentials whilst minimising the code base and complexity. 
 The first step is the roles table, this coordinates the authenication a user has over the system.
 The second step is the user table, this has a username and a password with a foreign key pointed at a specific role. One user account can only have one role.
