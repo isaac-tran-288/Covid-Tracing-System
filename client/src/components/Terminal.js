@@ -205,12 +205,13 @@ const Terminal = props => {
                     />
 
                     <div className="form-group" style={{ marginTop: 20 }}>
-                        <button className="btn btn-primary btn-block"
+                      
+                        <button className="btn btn-primary btn-block" 
                             onClick={() => {
                                 handleFormType("manual");
                                 startCountDownTimer();
                             }}>
-                            <span>Switch To Manual Check-in</span>
+                                <span>Switch To Manual Check-in</span>
                         </button>
                     </div>
                 </div>

@@ -181,8 +181,8 @@ const Register = (props) => {
                             </div>
                         </div>
 
-                        {/*Show a 'public' user their QR code once they have registered */}
-                        {data.role === "public" && (
+                        {/*Show a 'public' user their QR code once they have registered successfully */}
+                        {data.role === "public" && successful && (
                             <div>
                                 <strong>QR Code:</strong><br />
 

@@ -15,6 +15,7 @@ They have approached your team with creating a solution for the new COVID tracin
 
 
 ## ACCOUNT SETUP
+
 There is a multistep structure for the account setups to make verification and authentication a smoother process and keep data seperate from the login credentials whilst minimising the code base and complexity. 
 The first step is the roles table, this coordinates the authenication a user has over the system.
 The second step is the user table, this has a username and a password with a foreign key pointed at a specific role. One user account can only have one role.
